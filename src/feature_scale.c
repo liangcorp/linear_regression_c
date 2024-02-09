@@ -25,7 +25,7 @@ typedef struct {
 typedef struct {
 	double *y;
 	double mean;
-	double std_dev;
+	double std_deviation;
 } normal_single_y;
 
 typedef struct {
@@ -38,7 +38,7 @@ typedef struct {
     Use mean normalization on 1D array.
     This is used on Y that is a 1D array.
  */
-normal_single_y *mean_normal_result(double *v, int num_train)
+normal_single_y *mean_normal_result(double *y, int num_train)
 {
 	int i, j;
 
@@ -50,17 +50,17 @@ normal_single_y *mean_normal_result(double *v, int num_train)
 	normal_single_y *result = NULL;
 
 	/* Set max and min for feature */
-	max = v[0];
-	min = v[1];
+	max = y[0];
+	min = y[1];
 
 	/* Find max and min for feature */
 	for (i = 0; i < num_train; i++) {
-		if (max < v[i])
-			max = v[i];
-		else if (min > v[i])
-			min = v[i];
+		if (max < y[i])
+			max = y[i];
+		else if (min > y[i])
+			min = y[i];
 
-		sum += v[i];
+		sum += y[i];
 	}
 
 	mean = sum / num_train;
@@ -68,7 +68,7 @@ normal_single_y *mean_normal_result(double *v, int num_train)
 	sum = 0.0L;
 
 	for (i = 0; i < num_train; i++) {
-		sum += (v[i] - mean) * (v[i] - mean);
+		sum += (y[i] - mean) * (y[i] - mean);
 	}
 
 	std_dev = sqrt(sum / num_train);
@@ -76,14 +76,14 @@ normal_single_y *mean_normal_result(double *v, int num_train)
 	result_v = calloc(num_train, sizeof(double));
 
 	for (i = 0; i < num_train; i++) {
-		result_v[i] = (v[i] - mean) / std_dev;
+		result_v[i] = (y[i] - mean) / std_dev;
 	}
 
 	result = calloc(1, sizeof(normal_single_y));
 
 	result->y = result_v;
 	result->mean = mean;
-	result->std_dev = std_dev;
+	result->std_deviation = std_dev;
 
 	return result;
 }
@@ -99,96 +99,87 @@ normal_single_y *mean_normal_result(double *v, int num_train)
 
     NOTE: Run free on pointers of the structure
             and its elements in main.
-
-    NOTE: The values of first feature (i.e. x[0] is 1.0)
  */
-normal_multi_x *mean_normal_feature(double **v, int num_train, int num_feat)
+normal_multi_x *mean_normal_feature(double **X, int num_train, int num_feat)
 {
 	int i, j;
 	double sum = 0.0L;
+	int no_x_feat = num_feat - 1;
 
-	double *max = calloc(num_feat, sizeof(double));
-	double *min = calloc(num_feat, sizeof(double));
-	double *mean = calloc(num_feat, sizeof(double));
-	double *std_dev = calloc(num_feat, sizeof(double));
+	double *max = calloc(no_x_feat, sizeof(double));
+	double *min = calloc(no_x_feat, sizeof(double));
+	double *mean = calloc(no_x_feat, sizeof(double));
+	double *std_deviation = calloc(no_x_feat, sizeof(double));
 
-	double **result_V = calloc(num_train, sizeof(double));
+	double **result_X = calloc(num_train, sizeof(double));
 
 	for (i = 0; i < num_train; i++) {
-		result_V[i] = calloc(num_feat, sizeof(double));
+		result_X[i] = calloc(no_x_feat, sizeof(double));
 	}
 
 	normal_multi_x *result = calloc(1, sizeof(normal_multi_x));
 
 	/* Set max and min for each feature */
-	for (j = 0; j < num_feat; j++) {
-		max[j] = v[0][j];
-		min[j] = v[0][j];
+	for (j = 0; j < no_x_feat; j++) {
+		max[j] = X[0][j];
+		min[j] = X[0][j];
 	}
 
 	/* set mean and standard deviation for the first feature to 1.0 */
 	mean[0] = 1.0L;
-	std_dev[0] = 1.0L;
+	std_deviation[0] = 1.0L;
 
 	/*
         Find max and min for each feature
         Each column is a feature, this means
         we need to loop from column to row.
-
-        NOTE: skipping the first column (i.e. x[0]).
     */
-	for (j = 1; j < num_feat; j++) {
+	for (j = 0; j < no_x_feat; j++) {
 		sum = 0.0L;
 		for (i = 0; i < num_train; i++) {
-			if (max[j] < v[i][j])
-				max[j] = v[i][j];
-			else if (min[j] > v[i][j])
-				min[j] = v[i][j];
+			if (max[j] < X[i][j])
+				max[j] = X[i][j];
+			else if (min[j] > X[i][j])
+				min[j] = X[i][j];
 
-			sum += v[i][j];
+			sum += X[i][j];
 		}
 		mean[j] = sum;
 	}
 
 	/* find mean for each feature */
-	for (j = 1; j < num_feat; j++) {
+	for (j = 0; j < no_x_feat; j++) {
 		mean[j] = mean[j] / num_train;
 	}
 
 	/*
         Loop from column to row.
         Calculate the standard deviation for each feature.
-        NOTE: skipping the first column (i.e. x[0]).
     */
-	for (j = 1; j < num_feat; j++) {
+	for (j = 0; j < no_x_feat; j++) {
 		sum = 0.0L;
 		for (i = 0; i < num_train; i++) {
-			sum += (v[i][j] - mean[j]) * (v[i][j] - mean[j]);
+			sum += (X[i][j] - mean[j]) * (X[i][j] - mean[j]);
 		}
-		std_dev[j] = sqrt(sum / num_train);
-	}
-
-	/* Set the value of first column (x[0]) to 1.0 */
-	for (i = 0; i < num_train; i++) {
-		result_V[i][0] = 1.0L;
+		std_deviation[j] = sqrt(sum / num_train);
 	}
 
 	/*
         set the value of new 2D array to normalized value.
     */
 
-	for (j = 1; j < num_feat; j++) {
+	for (j = 0; j < no_x_feat; j++) {
 		for (i = 0; i < num_train; i++) {
-			result_V[i][j] = (v[i][j] - mean[j]) / std_dev[j];
+			result_X[i][j] = (X[i][j] - mean[j]) / std_deviation[j];
 		}
 	}
 
-	result->X = result_V;
+	result->X = result_X;
 	result->mean = mean;
-	result->std_deviation = std_dev;
+	result->std_deviation = std_deviation;
 
-    free(max);
-    free(min);
+	free(max);
+	free(min);
 
 	return result;
 }
@@ -235,31 +226,21 @@ data_t *read_data_file(char *file_name)
 	printf("Number of features: %d\n", n);
 #endif
 
-	rewind(fp);
-
 	X = calloc(m, sizeof(double));
 
 	for (i = 0; i < m; i++) {
-		X[i] = calloc(n, sizeof(double));
-	}
-
-	for (i = 0; i < m; i++) {
-		// Initialize the first features into 1.0
-		X[i][0] = 1.0L;
+		X[i] = calloc((n - 1), sizeof(double));
 	}
 
 	y = calloc(m, sizeof(double));
 
 	i = 0;
 
-#ifdef DEBUG
-	printf("Read all but the last column into X\n");
-	printf("Read the last column into y\n");
-#endif
+	rewind(fp);
 	while (fgets(str, 200, fp) != NULL) {
-		X[i][1] = strtod(strtok(str, ","), NULL);
+		X[i][0] = strtod(strtok(str, ","), NULL);
 
-		for (j = 2; j < n; j++) {
+		for (j = 1; j < n - 1; j++) {
 			// Read all but the last column into X
 			// Convert the string to double
 			X[i][j] = strtod(strtok(NULL, ","), NULL);
@@ -286,8 +267,10 @@ data_t *read_data_file(char *file_name)
 
 int write_to_file(double **x, double *y, int num_train, int num_feat)
 {
+    int no_x_feat = num_feat - 1;
+
 	for (int i = 0; i < num_train; i++) {
-		for (int j = 1; j < num_feat; j++) {
+		for (int j = 0; j < no_x_feat; j++) {
 			printf("%lf,", x[i][j]);
 		}
 		printf("%lf\n", y[i]);
@@ -319,22 +302,21 @@ int main(int argc, char *argv[])
 		free(data_set->X[i]); // Free the inner pointers before outer pointers
 	}
 
-    for (int i = 0; i < data_set->num_train; i++) {
-        free(result_X->X[i]); // Free the inner pointers before outer pointers
-    }
+	for (int i = 0; i < data_set->num_train; i++) {
+		free(result_X->X[i]); // Free the inner pointers before outer pointers
+	}
 
 	free(data_set->X);
 	free(data_set->y);
-    free(data_set);
+	free(data_set);
 
 	free(result_X->X);
-    free(result_X->mean);
-    free(result_X->std_deviation);
+	free(result_X->mean);
+	free(result_X->std_deviation);
 	free(result_X);
 
 	free(result_y->y);
 	free(result_y);
-
 
 #ifdef DEBUG
 	printf("Freed all memory\n");
