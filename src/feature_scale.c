@@ -281,9 +281,15 @@ data_t *read_data_file(char *file_name)
 	return data_set;
 }
 
-int write_to_file(double **x, double *y)
+int write_to_file(double **x, double *y, int num_train, int num_feat)
 {
-    return 0;
+	for (int i = 0; i < num_train; i++) {
+		for (int j = 0; j < num_feat; j++) {
+			printf("%lf  |  ", x[i][j]);
+		}
+		printf("%lf\n", y[i]);
+	}
+	return 0;
 }
 
 int main(int argc, char *argv[])
@@ -303,12 +309,15 @@ int main(int argc, char *argv[])
 	normal_single_y *result_y =
 		mean_normal_result(data_set->y, data_set->num_train);
 
-    for (int i = 0; i < data_set->num_train; i++) {
-    	free(data_set->X[i]); // Free the inner pointers before outer pointers
-    }
+	write_to_file(result_X->V, result_y->v, data_set->num_train,
+		      data_set->num_feat);
 
-    free(data_set->X);
-    free(data_set->y);
+	for (int i = 0; i < data_set->num_train; i++) {
+		free(data_set->X[i]); // Free the inner pointers before outer pointers
+	}
+
+	free(data_set->X);
+	free(data_set->y);
 	free(result_X->V);
 	free(result_X);
 	free(result_y->v);
