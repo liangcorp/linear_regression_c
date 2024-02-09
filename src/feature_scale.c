@@ -187,6 +187,9 @@ normal_multi_x *mean_normal_feature(double **v, int num_train, int num_feat)
 	result->mean = mean;
 	result->std_dev = std_dev;
 
+    free(max);
+    free(min);
+
 	return result;
 }
 
@@ -316,15 +319,19 @@ int main(int argc, char *argv[])
 		free(data_set->X[i]); // Free the inner pointers before outer pointers
 	}
 
+    for (int i = 0; i < data_set->num_train; i++) {
+        free(result_X->V[i]); // Free the inner pointers before outer pointers
+    }
+
 	free(data_set->X);
 	free(data_set->y);
     free(data_set);
 
-	for (int i = 0; i < data_set->num_train; i++) {
-		free(result_X->V[i]); // Free the inner pointers before outer pointers
-	}
 	free(result_X->V);
+    free(result_X->mean);
+    free(result_X->std_dev);
 	free(result_X);
+
 	free(result_y->v);
 	free(result_y);
 
