@@ -299,7 +299,14 @@ int main(int argc, char *argv[])
 	// Get data set from data file
 	data_set = read_from_data_file(argv[1]);
 
-	normal_single_t *result_y = mean_normal_single(y, num_train);
+	normal_multi_t *result_X = mean_normal_multiple(
+		data_set->X, data_set->num_train, data_set->num_feat);
+
+	normal_single_t *result_y =
+		mean_normal_single(data_set->y, data_set->num_train);
+
+	free(result_X->V);
+	free(result_X);
 	free(result_y->v);
 	free(result_y);
 
