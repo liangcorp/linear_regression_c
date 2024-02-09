@@ -9,9 +9,30 @@
  *
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <malloc.h>
 #include <math.h>
 
-#include "machine_learning.h"
+typedef struct {
+	double **X;
+	double *y;
+	int num_train;
+	int num_feat;
+} data_t;
+
+typedef struct {
+	double *v;
+	double mean;
+	double std_dev;
+} normal_single_t;
+
+typedef struct {
+	double **V;
+	double *mean;
+	double *std_dev;
+} normal_multi_t;
 
 /*
     Use mean normalization on 1D array.
@@ -167,4 +188,139 @@ normal_multi_t *mean_normal_multiple(double **v, int num_train, int num_feat)
 	result->std_dev = std_dev;
 
 	return result;
+}
+
+// Function name is the same of the source code file name.
+// This is for convenient purpose.
+data_t *read_from_data_file(char *file_name)
+{
+	data_t *data_set = NULL;
+
+	FILE *fp = NULL;
+
+	char str[200];
+
+	double **X = NULL; // features
+	double *y = NULL; // results
+
+	int m = 0; // number of training set
+	int n = 0; // number of features
+
+	int i = 0;
+	int j = 0;
+
+	/* opening file for reading */
+	fp = fopen(file_name, "r");
+
+	if (fp == NULL) {
+		perror("Error opening file");
+		exit(EXIT_FAILURE);
+	}
+
+	while (fgets(str, 200, fp) != NULL) {
+		// Find number of training set
+		m++;
+	}
+
+	char *token = strtok(str, ",");
+	while (token != NULL) {
+		// Find number of features
+		token = strtok(NULL, ",");
+		n++;
+	}
+
+	printf("Number of training sets: %d\n", m);
+	printf("Number of features: %d\n", n);
+
+	rewind(fp);
+
+	X = calloc(m, sizeof(double));
+
+	for (i = 0; i < m; i++) {
+		X[i] = calloc(n, sizeof(double));
+	}
+
+	for (i = 0; i < m; i++) {
+		// Initialize the first features into 1.0
+		X[i][0] = 1.0L;
+	}
+
+	y = calloc(m, sizeof(double));
+
+	i = 0;
+
+#ifdef DEBUG
+	printf("Read all but the last column into X\n");
+	printf("Read the last column into y\n");
+#endif
+	while (fgets(str, 200, fp) != NULL) {
+		X[i][1] = strtod(strtok(str, ","), NULL);
+
+		for (j = 2; j < n; j++) {
+			// Read all but the last column into X
+			// Convert the string to double
+			X[i][j] = strtod(strtok(NULL, ","), NULL);
+		}
+
+		// Read the last column into y
+		// Convert the string to double
+		y[i] = strtod(strtok(NULL, ","), NULL);
+
+		i++; // Move to the next line
+	}
+
+	fclose(fp);
+	fp = NULL;
+
+	data_set = calloc(1, sizeof(data_t));
+	data_set->X = X;
+	data_set->y = y;
+	data_set->num_train = m;
+	data_set->num_feat = n;
+
+	return data_set;
+}
+
+int main(int argc, char *argv[])
+{
+#ifdef TIMER
+	clock_t cpu_start = clock(); /* Initial processor time */
+#endif
+	data_t *data_set = NULL;
+
+	int i;
+
+	unsigned int num_train = 0; // number of training set
+	unsigned int num_feat = 0; // number of features
+
+	double **X = NULL; // features
+	double *y = NULL; // results
+
+	// Get data set from data file
+	data_set = read_from_data_file(argv[1]);
+
+	normal_single_t *result_y = mean_normal_single(y, num_train);
+	free(result_y->v);
+	free(result_y);
+
+	for (i = 0; i < num_train; i++) {
+		free(X[i]); // Free the inner pointers before outer pointers
+	}
+
+	free(X);
+	free(y);
+	free(data_set);
+
+#ifdef DEBUG
+	printf("Freed all memory\n");
+#endif
+#ifdef TIMER
+
+	clock_t cpu_end = clock(); /* Final CPU time */
+
+	printf("main completed in %lf seconds\n",
+	       ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
+#endif
+
+	return 0;
 }

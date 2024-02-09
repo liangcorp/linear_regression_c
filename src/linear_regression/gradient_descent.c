@@ -8,6 +8,9 @@
  * @copyright Copyright (c) 2021
  *
  */
+
+#include <stdlib.h>
+#include <string.h>
 #include "machine_learning.h"
 
 double *gradient_desent(double **X, double *y, double *theta, float alpha,
