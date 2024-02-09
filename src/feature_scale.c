@@ -9,6 +9,8 @@
  *
  */
 
+#include <math.h>
+
 #include "machine_learning.h"
 
 /*

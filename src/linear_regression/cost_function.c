@@ -9,15 +9,15 @@
  *
  */
 
-#include "../machine_learning.h"
+#include "machine_learning.h"
 
-double cost_function(double** X, double* y, double* theta,
-                                int num_train, int num_feat)
+double cost_function(double **X, double *y, double *theta, int num_train,
+		     int num_feat)
 {
-    #ifdef TIMER
-        clock_t cpu_start = clock();    /* Initial processor time */
-    #endif
-    /*
+#ifdef TIMER
+	clock_t cpu_start = clock(); /* Initial processor time */
+#endif
+	/*
         Creating the algorithm for the cost function.
         X and y are the training sets.
         theta is a chosen number.
@@ -31,41 +31,36 @@ double cost_function(double** X, double* y, double* theta,
 
      */
 
-    int i, j;
+	int i, j;
 
-    double J_theta = 0.0L;   /* The cost */
-    double sum = 0.0L;
-    double *h_x = NULL;
+	double J_theta = 0.0L; /* The cost */
+	double sum = 0.0L;
+	double *h_x = NULL;
 
+	h_x = calloc(num_train, sizeof(double));
 
+	for (i = 0; i < num_train; i++) {
+		sum = 0.0L;
+		for (j = 0; j < num_feat; j++) {
+			sum += X[i][j] * theta[j];
+		}
+		h_x[i] = sum;
+	}
 
-    h_x = calloc(num_train, sizeof(double));
+	for (i = 0; i < num_train; i++) {
+		J_theta += (h_x[i] - y[i]) * (h_x[i] - y[i]) /
+			   (2 * (double)num_train);
+	}
 
-    for (i = 0; i < num_train; i++)
-    {
-        sum = 0.0L;
-        for (j = 0; j < num_feat; j++)
-        {
-            sum += X[i][j] * theta[j];
-        }
-        h_x[i] = sum;
-    }
+#ifdef TIMER
 
-    for (i = 0; i < num_train; i++)
-    {
-        J_theta += (h_x[i] - y[i]) * (h_x[i] - y[i])
-                    / (2 * (double)num_train);
-    }
+	clock_t cpu_end = clock(); /* Final cpu time */
 
-    #ifdef TIMER
+	printf("Cost function completed in %lf seconds\n",
+	       ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
+#endif
 
-        clock_t cpu_end = clock();          /* Final cpu time */
+	free(h_x);
 
-        printf("Cost function completed in %lf seconds\n",
-                    ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
-    #endif
-
-    free(h_x);
-
-    return J_theta;
+	return J_theta;
 }

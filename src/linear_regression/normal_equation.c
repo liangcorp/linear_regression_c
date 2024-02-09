@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2021
  *
  */
-#include "../machine_learning.h"
+#include "machine_learning.h"
 
 /*
 	Calculate the Determinant (der) of a matrix
@@ -22,9 +22,9 @@ double get_determinant(double **matrix, unsigned int size)
 	unsigned int size_minor = size - 1;
 
 	double determinant = 0.0L;
-	double multiply =0.0L;
+	double multiply = 0.0L;
 
-	if (size == 2)	// 2x2 matrixes
+	if (size == 2) // 2x2 matrixes
 	{
 		/*
 			Calculate the Determinant (der) of 2D matrix
@@ -32,10 +32,9 @@ double get_determinant(double **matrix, unsigned int size)
 				 [C, D]]
 			Determinant = A * D - B * C
 		*/
-		determinant = matrix[0][0] * matrix[1][1]
-						- matrix[0][1] * matrix[1][0];
-	}
-	else if (size == 3)	// 3x3 matrixes
+		determinant = matrix[0][0] * matrix[1][1] -
+			      matrix[0][1] * matrix[1][0];
+	} else if (size == 3) // 3x3 matrixes
 	{
 		/*
 			Calculate the Determinant (der) of larger scale matrix
@@ -47,14 +46,12 @@ double get_determinant(double **matrix, unsigned int size)
 			der = A * E * I + B * F * G + C * D * H
 					- C * E * G - A * F * H - B * D * I;
 		*/
-		for (i = 0; i < size; i++)
-		{
-			z = i;	// starting column (increase each loop)
+		for (i = 0; i < size; i++) {
+			z = i; // starting column (increase each loop)
 			multiply = 1.0L;
-			for (j = 0; j < size; j++)
-			{
+			for (j = 0; j < size; j++) {
 				if (z >= size)
-					z = 0;	// Reset to column 0
+					z = 0; // Reset to column 0
 
 				multiply *= matrix[j][z];
 				z += 1;
@@ -63,25 +60,22 @@ double get_determinant(double **matrix, unsigned int size)
 			determinant += multiply;
 		}
 
-		for (i = 0; i < size; i++)
-		{
+		for (i = 0; i < size; i++) {
 			z = size - 1 - i;
 			multiply = 1.0L;
 
 			// starting column (decrease each loop)
-			for (j = 0; j < size; j++)
-			{
+			for (j = 0; j < size; j++) {
 				if (z == -1)
-					z = size - 1;	// Reset to column 0
+					z = size - 1; // Reset to column 0
 
 				multiply *= matrix[j][z];
-				z -= 1;		// Move to last column
+				z -= 1; // Move to last column
 			}
 			// C * E * G - A * F * H - B * D * I
 			determinant -= multiply;
 		}
-	}
-	else // 4x4 and above matrixes
+	} else // 4x4 and above matrixes
 	{
 		/*
 			Use self calling function to further reduce the
@@ -140,22 +134,19 @@ double get_determinant(double **matrix, unsigned int size)
 		int new_i, new_j;
 		j = 0;
 
-		for (i = 0; i < size; i++)
-		{
+		for (i = 0; i < size; i++) {
 			first_col[i] = matrix[i][0];
 			/*
 				Create cofactor matrix for first element
 				of each row.
 			*/
 			new_i = 0;
-			for (m = 0; m < size; m++)
-			{
+			for (m = 0; m < size; m++) {
 				new_j = 0;
-				for (n = 0; n < size; n++)
-				{
-					if (m != i && n != j)
-					{
-						m_cofactor[new_i][new_j] = matrix[m][n];
+				for (n = 0; n < size; n++) {
+					if (m != i && n != j) {
+						m_cofactor[new_i][new_j] =
+							matrix[m][n];
 						new_j++;
 					}
 				}
@@ -163,7 +154,7 @@ double get_determinant(double **matrix, unsigned int size)
 					new_i++;
 			}
 			deter_list[i] = get_determinant(m_cofactor, size_minor);
-		}	// end of i
+		} // end of i
 
 		for (i = 0; i < size; i++)
 			if (i % 2 == 0)
@@ -223,11 +214,11 @@ double get_determinant(double **matrix, unsigned int size)
 			[0.2, -0.3, 0]]
  */
 
-double** get_invert(double **matrix, unsigned int size)
+double **get_invert(double **matrix, unsigned int size)
 {
-	#ifdef TIMER
-        clock_t cpu_start = clock();    /* Initial processor time */
-    #endif
+#ifdef TIMER
+	clock_t cpu_start = clock(); /* Initial processor time */
+#endif
 	unsigned int i, j, m, n;
 	unsigned int size_minor = size - 1;
 	double **m_deter = NULL;
@@ -240,15 +231,12 @@ double** get_invert(double **matrix, unsigned int size)
 	for (i = 0; i < size; i++)
 		m_invert[i] = calloc(size, sizeof(double));
 
-	if (size == 2)
-	{
+	if (size == 2) {
 		m_invert[0][0] = matrix[1][1] / determinant;
 		m_invert[1][1] = matrix[0][0] / determinant;
 		m_invert[0][1] = -(matrix[0][1] / determinant);
 		m_invert[1][0] = -(matrix[1][0] / determinant);
-	}
-	else
-	{
+	} else {
 		// Calculate matrix of minors
 		m_deter = calloc(size_minor, sizeof(double));
 		for (i = 0; i < size_minor; i++)
@@ -261,30 +249,27 @@ double** get_invert(double **matrix, unsigned int size)
 		int new_i = 0;
 		int new_j = 0;
 
-		for (i = 0; i < size; i++)
-		{
-			for (j = 0; j < size; j++)
-			{
+		for (i = 0; i < size; i++) {
+			for (j = 0; j < size; j++) {
 				new_i = 0;
-				for (m = 0; m < size; m++)
-				{
+				for (m = 0; m < size; m++) {
 					new_j = 0;
-					for (n = 0; n < size; n++)
-					{
-						if (m != i && n != j)
-						{
-							m_deter[new_i][new_j] = matrix[m][n];
+					for (n = 0; n < size; n++) {
+						if (m != i && n != j) {
+							m_deter[new_i][new_j] =
+								matrix[m][n];
 							new_j++;
 						}
 					}
 
 					if (m != i && n != j)
 						new_i++;
-				}	// end of m
+				} // end of m
 
-				m_minors[i][j] = get_determinant(m_deter, size_minor);
-			}	// end of j
-		}	// end of i
+				m_minors[i][j] =
+					get_determinant(m_deter, size_minor);
+			} // end of j
+		} // end of i
 
 		// Matrix of Cofactors
 		for (i = 0; i < size; i++)
@@ -311,7 +296,7 @@ double** get_invert(double **matrix, unsigned int size)
 			free(m_trans[i]);
 		free(m_trans);
 
-		for (i = 0; i < size ; i++)
+		for (i = 0; i < size; i++)
 			free(m_minors[i]);
 		free(m_minors);
 
@@ -320,16 +305,15 @@ double** get_invert(double **matrix, unsigned int size)
 
 		free(m_deter);
 	}
-	#ifdef TIMER
+#ifdef TIMER
 
-        clock_t cpu_end = clock();          /* Final cpu time */
+	clock_t cpu_end = clock(); /* Final cpu time */
 
-        printf("Matrix inversion completed in %lf seconds\n",
-                    ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
-    #endif
+	printf("Matrix inversion completed in %lf seconds\n",
+	       ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
+#endif
 	return m_invert;
 }
-
 
 /*
 	Use normal equation to calculate theta
@@ -341,12 +325,12 @@ double** get_invert(double **matrix, unsigned int size)
 	 - Slow if number of features is very large (10,000+)
  */
 
-double* normal_equation(double **X, double *y,
-				unsigned int num_train, unsigned int num_feat)
+double *normal_equation(double **X, double *y, unsigned int num_train,
+			unsigned int num_feat)
 {
-	#ifdef TIMER
-        clock_t cpu_start = clock();    /* Initial processor time */
-    #endif
+#ifdef TIMER
+	clock_t cpu_start = clock(); /* Initial processor time */
+#endif
 	unsigned int i, j, z;
 	double *theta = NULL;
 	double **m_X_X_trans = NULL;
@@ -369,10 +353,8 @@ double* normal_equation(double **X, double *y,
 	for (i = 0; i < num_feat; i++)
 		m_X_X_trans[i] = calloc(num_feat, sizeof(double));
 
-	for (i = 0; i < num_feat; i++)
-	{
-		for (j = 0; j < num_feat; j++)
-		{
+	for (i = 0; i < num_feat; i++) {
+		for (j = 0; j < num_feat; j++) {
 			sum = 0.0L;
 			for (z = 0; z < num_train; z++)
 				sum += X[z][i] * X[z][j];
@@ -391,8 +373,7 @@ double* normal_equation(double **X, double *y,
 	*/
 	y_x_trans = calloc(num_feat, sizeof(double));
 
-	for (j = 0; j < num_feat; j++)
-	{
+	for (j = 0; j < num_feat; j++) {
 		sum = 0.0L;
 		for (i = 0; i < num_train; i++)
 			sum += X[i][j] * y[i];
@@ -412,8 +393,7 @@ double* normal_equation(double **X, double *y,
 			theta = invrt_mtrx * y_x_trans
 	*/
 	theta = calloc(num_feat, sizeof(double));
-	for (i = 0; i < num_feat; i++)
-	{
+	for (i = 0; i < num_feat; i++) {
 		sum = 0.0L;
 		for (j = 0; j < num_feat; j++)
 			sum += m_invert[i][j] * y_x_trans[j];
@@ -431,12 +411,12 @@ double* normal_equation(double **X, double *y,
 	free(m_X_X_trans);
 	free(y_x_trans);
 
-	#ifdef TIMER
+#ifdef TIMER
 
-        clock_t cpu_end = clock();          /* Final cpu time */
+	clock_t cpu_end = clock(); /* Final cpu time */
 
-        printf("Normal equation completed in %lf seconds\n",
-                    ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
-    #endif
+	printf("Normal equation completed in %lf seconds\n",
+	       ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
+#endif
 	return theta;
 }
