@@ -34,8 +34,8 @@ data_t *read_from_data_file(char *file_name)
 	double **X = NULL; // features
 	double *y = NULL; // results
 
-	int m = 0; // number of training set
-	int n = 0; // number of features
+	int num_train = 0; // number of training set
+	int num_feat = 0; // number of features
 
 	int i = 0;
 	int j = 0;
@@ -48,46 +48,28 @@ data_t *read_from_data_file(char *file_name)
 		exit(EXIT_FAILURE);
 	}
 
+	// Read the first line and split by ','
+	// Count the number of features via no. of splits
+	if (fgets(str, 200, fp) != NULL) {
+		char *token = strtok(str, ",");
+		while (token != NULL) {
+			token = strtok(NULL, ",");
+			num_feat++;
+		}
+	}
+	rewind(fp); // go back to top of the file
+
+	X = calloc(1, sizeof(double));
+	y = calloc(1, sizeof(double));
+
 	while (fgets(str, 200, fp) != NULL) {
 		// Find number of training set
-		m++;
-	}
+		X[i] = calloc((num_feat), sizeof(double));
 
-	char *token = strtok(str, ",");
-	while (token != NULL) {
-		// Find number of features
-		token = strtok(NULL, ",");
-		n++;
-	}
-
-	printf("Number of training sets: %d\n", m);
-	printf("Number of features: %d\n", n);
-
-	rewind(fp);
-
-	X = calloc(m, sizeof(double));
-
-	for (i = 0; i < m; i++) {
-		X[i] = calloc(n, sizeof(double));
-	}
-
-	for (i = 0; i < m; i++) {
-		// Initialize the first features into 1.0
 		X[i][0] = 1.0L;
-	}
-
-	y = calloc(m, sizeof(double));
-
-	i = 0;
-
-#ifdef DEBUG
-	printf("Read all but the last column into X\n");
-	printf("Read the last column into y\n");
-#endif
-	while (fgets(str, 200, fp) != NULL) {
 		X[i][1] = strtod(strtok(str, ","), NULL);
 
-		for (j = 2; j < n; j++) {
+		for (j = 2; j < num_feat; j++) {
 			// Read all but the last column into X
 			// Convert the string to double
 			X[i][j] = strtod(strtok(NULL, ","), NULL);
@@ -97,8 +79,17 @@ data_t *read_from_data_file(char *file_name)
 		// Convert the string to double
 		y[i] = strtod(strtok(NULL, ","), NULL);
 
-		i++; // Move to the next line
+		i++; // Move to the next training set
+
+		// Expend the memory size
+		X = realloc(X, (i + 1) * sizeof(double));
+		y = realloc(y, (i + 1) * sizeof(double));
 	}
+
+	num_train = i; //  set the number of training sets
+
+	printf("Number of training sets: %d\n", num_train);
+	printf("Number of features: %d\n", num_feat);
 
 	fclose(fp);
 	fp = NULL;
@@ -106,8 +97,8 @@ data_t *read_from_data_file(char *file_name)
 	data_set = calloc(1, sizeof(data_t));
 	data_set->X = X;
 	data_set->y = y;
-	data_set->num_train = m;
-	data_set->num_feat = n;
+	data_set->num_train = num_train;
+	data_set->num_feat = num_feat;
 
 	return data_set;
 }

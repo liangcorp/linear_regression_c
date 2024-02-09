@@ -196,7 +196,7 @@ data_t *read_data_file(char *file_name)
 	double *y = NULL; // results
 
 	int num_train = 0; // number of training set
-	int nun_feat = 0; // number of features
+	int num_feat = 0; // number of features
 
 	int i = 0;
 	int j = 0;
@@ -215,7 +215,7 @@ data_t *read_data_file(char *file_name)
 		char *token = strtok(str, ",");
 		while (token != NULL) {
 			token = strtok(NULL, ",");
-			nun_feat++;
+			num_feat++;
 		}
 	}
 
@@ -226,10 +226,10 @@ data_t *read_data_file(char *file_name)
 
 	while (fgets(str, 200, fp) != NULL) {
 		// Find number of training set
-		X[i] = calloc((nun_feat - 1), sizeof(double));
+		X[i] = calloc((num_feat - 1), sizeof(double));
 		X[i][0] = strtod(strtok(str, ","), NULL);
 
-		for (j = 1; j < nun_feat - 1; j++) {
+		for (j = 1; j < num_feat - 1; j++) {
 			// Read all but the last column into X
 			// Convert the string to double
 			X[i][j] = strtod(strtok(NULL, ","), NULL);
@@ -260,7 +260,7 @@ data_t *read_data_file(char *file_name)
 	data_set->X = X;
 	data_set->y = y;
 	data_set->num_train = num_train;
-	data_set->num_feat = nun_feat;
+	data_set->num_feat = num_feat;
 
 	return data_set;
 }
