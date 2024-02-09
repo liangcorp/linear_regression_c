@@ -23,15 +23,15 @@ typedef struct {
 } data_t;
 
 typedef struct {
-	double *v;
+	double *y;
 	double mean;
 	double std_dev;
 } normal_single_y;
 
 typedef struct {
-	double **V;
+	double **X;
 	double *mean;
-	double *std_dev;
+	double *std_deviation;
 } normal_multi_x;
 
 /*
@@ -81,7 +81,7 @@ normal_single_y *mean_normal_result(double *v, int num_train)
 
 	result = calloc(1, sizeof(normal_single_y));
 
-	result->v = result_v;
+	result->y = result_v;
 	result->mean = mean;
 	result->std_dev = std_dev;
 
@@ -183,9 +183,9 @@ normal_multi_x *mean_normal_feature(double **v, int num_train, int num_feat)
 		}
 	}
 
-	result->V = result_V;
+	result->X = result_V;
 	result->mean = mean;
-	result->std_dev = std_dev;
+	result->std_deviation = std_dev;
 
     free(max);
     free(min);
@@ -312,7 +312,7 @@ int main(int argc, char *argv[])
 	normal_single_y *result_y =
 		mean_normal_result(data_set->y, data_set->num_train);
 
-	write_to_file(result_X->V, result_y->v, data_set->num_train,
+	write_to_file(result_X->X, result_y->y, data_set->num_train,
 		      data_set->num_feat);
 
 	for (int i = 0; i < data_set->num_train; i++) {
@@ -320,19 +320,19 @@ int main(int argc, char *argv[])
 	}
 
     for (int i = 0; i < data_set->num_train; i++) {
-        free(result_X->V[i]); // Free the inner pointers before outer pointers
+        free(result_X->X[i]); // Free the inner pointers before outer pointers
     }
 
 	free(data_set->X);
 	free(data_set->y);
     free(data_set);
 
-	free(result_X->V);
+	free(result_X->X);
     free(result_X->mean);
-    free(result_X->std_dev);
+    free(result_X->std_deviation);
 	free(result_X);
 
-	free(result_y->v);
+	free(result_y->y);
 	free(result_y);
 
 
