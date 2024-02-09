@@ -291,15 +291,8 @@ int main(int argc, char *argv[])
 #ifdef TIMER
 	clock_t cpu_start = clock(); /* Initial processor time */
 #endif
+
 	data_t *data_set = NULL;
-
-	int i;
-
-	unsigned int num_train = 0; // number of training set
-	unsigned int num_feat = 0; // number of features
-
-	double **X = NULL; // features
-	double *y = NULL; // results
 
 	// Get data set from data file
 	data_set = read_data_file(argv[1]);
@@ -310,17 +303,17 @@ int main(int argc, char *argv[])
 	normal_single_y *result_y =
 		mean_normal_result(data_set->y, data_set->num_train);
 
+    for (int i = 0; i < data_set->num_train; i++) {
+    	free(data_set->X[i]); // Free the inner pointers before outer pointers
+    }
+
+    free(data_set->X);
+    free(data_set->y);
 	free(result_X->V);
 	free(result_X);
 	free(result_y->v);
 	free(result_y);
 
-	for (i = 0; i < num_train; i++) {
-		free(X[i]); // Free the inner pointers before outer pointers
-	}
-
-	free(X);
-	free(y);
 	free(data_set);
 
 #ifdef DEBUG
