@@ -26,19 +26,19 @@ typedef struct {
 	double *v;
 	double mean;
 	double std_dev;
-} normal_single_t;
+} normal_single_y;
 
 typedef struct {
 	double **V;
 	double *mean;
 	double *std_dev;
-} normal_multi_t;
+} normal_multi_x;
 
 /*
     Use mean normalization on 1D array.
     This is used on Y that is a 1D array.
  */
-normal_single_t *mean_normal_single(double *v, int num_train)
+normal_single_y *mean_normal_result(double *v, int num_train)
 {
 	int i, j;
 
@@ -47,7 +47,7 @@ normal_single_t *mean_normal_single(double *v, int num_train)
 	double sum = 0.0L;
 
 	double *result_v = NULL;
-	normal_single_t *result = NULL;
+	normal_single_y *result = NULL;
 
 	/* Set max and min for feature */
 	max = v[0];
@@ -79,7 +79,7 @@ normal_single_t *mean_normal_single(double *v, int num_train)
 		result_v[i] = (v[i] - mean) / std_dev;
 	}
 
-	result = calloc(1, sizeof(normal_single_t));
+	result = calloc(1, sizeof(normal_single_y));
 
 	result->v = result_v;
 	result->mean = mean;
@@ -102,7 +102,7 @@ normal_single_t *mean_normal_single(double *v, int num_train)
 
     NOTE: The values of first feature (i.e. x[0] is 1.0)
  */
-normal_multi_t *mean_normal_multiple(double **v, int num_train, int num_feat)
+normal_multi_x *mean_normal_feature(double **v, int num_train, int num_feat)
 {
 	int i, j;
 	double sum = 0.0L;
@@ -118,7 +118,7 @@ normal_multi_t *mean_normal_multiple(double **v, int num_train, int num_feat)
 		result_V[i] = calloc(num_feat, sizeof(double));
 	}
 
-	normal_multi_t *result = calloc(1, sizeof(normal_multi_t));
+	normal_multi_x *result = calloc(1, sizeof(normal_multi_x));
 
 	/* Set max and min for each feature */
 	for (j = 0; j < num_feat; j++) {
@@ -190,9 +190,7 @@ normal_multi_t *mean_normal_multiple(double **v, int num_train, int num_feat)
 	return result;
 }
 
-// Function name is the same of the source code file name.
-// This is for convenient purpose.
-data_t *read_from_data_file(char *file_name)
+data_t *read_data_file(char *file_name)
 {
 	data_t *data_set = NULL;
 
@@ -229,8 +227,10 @@ data_t *read_from_data_file(char *file_name)
 		n++;
 	}
 
+#ifdef DEBUG
 	printf("Number of training sets: %d\n", m);
 	printf("Number of features: %d\n", n);
+#endif
 
 	rewind(fp);
 
@@ -281,6 +281,11 @@ data_t *read_from_data_file(char *file_name)
 	return data_set;
 }
 
+int write_to_file(double **x, double *y)
+{
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
 #ifdef TIMER
@@ -297,13 +302,13 @@ int main(int argc, char *argv[])
 	double *y = NULL; // results
 
 	// Get data set from data file
-	data_set = read_from_data_file(argv[1]);
+	data_set = read_data_file(argv[1]);
 
-	normal_multi_t *result_X = mean_normal_multiple(
+	normal_multi_x *result_X = mean_normal_feature(
 		data_set->X, data_set->num_train, data_set->num_feat);
 
-	normal_single_t *result_y =
-		mean_normal_single(data_set->y, data_set->num_train);
+	normal_single_y *result_y =
+		mean_normal_result(data_set->y, data_set->num_train);
 
 	free(result_X->V);
 	free(result_X);
