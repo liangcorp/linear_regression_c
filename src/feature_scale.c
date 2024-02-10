@@ -246,14 +246,14 @@ data_t *read_data_file(char *file_name)
 		y = realloc(y, (i + 1) * sizeof(double));
 	}
 
-	num_train = i;  //  set the number of training sets
+	num_train = i; //  set the number of training sets
 
 #ifdef DEBUG
 	printf("Number of training sets: %d\n", num_train);
 	printf("Number of features: %d\n", num_feat);
 #endif
 
-	fclose(fp);     // close file
+	fclose(fp); // close file
 	fp = NULL;
 
 	data_set = calloc(1, sizeof(data_t));
@@ -265,16 +265,29 @@ data_t *read_data_file(char *file_name)
 	return data_set;
 }
 
-int write_to_file(double **x, double *y, int num_train, int num_feat)
+int write_to_file(double **x, double *y, int num_train, int num_feat,
+		  char *filename)
 {
+	FILE *fptr = fopen(filename, "w");
+
 	int no_x_feat = num_feat - 1;
 
 	for (int i = 0; i < num_train; i++) {
 		for (int j = 0; j < no_x_feat; j++) {
-			printf("%lf,", x[i][j]);
+			int len = snprintf(NULL, 0, "%lf", x[i][j]);
+			char *buffer = calloc(len + 1, sizeof(char));
+			snprintf(buffer, len + 1, "%lf", x[i][j]);
+			strcat(buffer, ",");
+			fprintf(fptr, "%s", buffer);
 		}
-		printf("%lf\n", y[i]);
+		int len = snprintf(NULL, 0, "%lf", y[i]);
+		char *buffer = calloc(len + 1, sizeof(char));
+		snprintf(buffer, len + 1, "%lf\n", y[i]);
+		strcat(buffer, "\n");
+		fprintf(fptr, "%s", buffer);
 	}
+
+	fclose(fptr);
 	return 0;
 }
 
@@ -286,8 +299,19 @@ int main(int argc, char *argv[])
 
 	data_t *data_set = NULL;
 
+	if (argc < 4) {
+		printf("not enough input\n");
+		return 1;
+	}
 	// Get data set from data file
 	data_set = read_data_file(argv[1]);
+
+	if (strcmp(argv[2], "-o")) {
+		printf("wrong command flag\n");
+		return 1;
+	}
+
+	char *output_file = argv[3];
 
 	normal_multi_x *result_X = mean_normal_feature(
 		data_set->X, data_set->num_train, data_set->num_feat);
@@ -296,7 +320,7 @@ int main(int argc, char *argv[])
 		mean_normal_result(data_set->y, data_set->num_train);
 
 	write_to_file(result_X->X, result_y->y, data_set->num_train,
-		      data_set->num_feat);
+		      data_set->num_feat, output_file);
 
 	for (int i = 0; i < data_set->num_train; i++) {
 		free(data_set->X[i]); // Free the inner pointers before outer pointers
