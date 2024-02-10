@@ -128,10 +128,6 @@ normal_multi_x *mean_normal_x(double **X, int num_train, int num_feat)
 		min[j] = X[0][j];
 	}
 
-	/* set mean and standard deviation for the first feature to 1.0 */
-	mean[0] = 1.0L;
-	std_deviation[0] = 1.0L;
-
 	/*
         Find max and min for each feature
         Each column is a feature, this means
