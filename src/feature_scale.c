@@ -15,6 +15,9 @@
 #include <malloc.h>
 #include <math.h>
 
+#define MAX_STRING 20
+#define MAX_LINE 600
+
 typedef struct {
 	double **X;
 	double *y;
@@ -38,7 +41,7 @@ typedef struct {
     Use mean normalization on 1D array.
     This is used on Y that is a 1D array.
  */
-normal_single_y *mean_normal_result(double *y, int num_train)
+normal_single_y *mean_normal_y(double *y, int num_train)
 {
 	int i, j;
 
@@ -100,7 +103,7 @@ normal_single_y *mean_normal_result(double *y, int num_train)
     NOTE: Run free on pointers of the structure
             and its elements in main.
  */
-normal_multi_x *mean_normal_feature(double **X, int num_train, int num_feat)
+normal_multi_x *mean_normal_x(double **X, int num_train, int num_feat)
 {
 	int i, j;
 	double sum = 0.0L;
@@ -190,7 +193,7 @@ data_t *read_data_file(char *file_name)
 
 	FILE *fp = NULL;
 
-	char str[200];
+	char str[MAX_LINE];
 
 	double **X = NULL; // features
 	double *y = NULL; // results
@@ -211,7 +214,7 @@ data_t *read_data_file(char *file_name)
 
 	// Read the first line and split by ','
 	// Count the number of features via no. of splits
-	if (fgets(str, 200, fp) != NULL) {
+	if (fgets(str, MAX_LINE, fp) != NULL) {
 		char *token = strtok(str, ",");
 		while (token != NULL) {
 			token = strtok(NULL, ",");
@@ -224,7 +227,7 @@ data_t *read_data_file(char *file_name)
 	X = calloc(1, sizeof(double));
 	y = calloc(1, sizeof(double));
 
-	while (fgets(str, 200, fp) != NULL) {
+	while (fgets(str, MAX_LINE, fp) != NULL) {
 		// Find number of training set
 		X[i] = calloc((num_feat - 1), sizeof(double));
 		X[i][0] = strtod(strtok(str, ","), NULL);
@@ -271,23 +274,23 @@ int write_to_file(double **x, double *y, int num_train, int num_feat,
 	FILE *fptr = fopen(filename, "w");
 
 	int no_x_feat = num_feat - 1;
+	char *buffer = calloc(MAX_STRING, sizeof(char));
 
 	for (int i = 0; i < num_train; i++) {
 		for (int j = 0; j < no_x_feat; j++) {
-			int len = snprintf(NULL, 0, "%lf", x[i][j]);
-			char *buffer = calloc(len + 1, sizeof(char));
-			snprintf(buffer, len + 1, "%lf", x[i][j]);
+			snprintf(buffer, sizeof(buffer), "%lf", x[i][j]);
 			strcat(buffer, ",");
 			fprintf(fptr, "%s", buffer);
 		}
-		int len = snprintf(NULL, 0, "%lf", y[i]);
-		char *buffer = calloc(len + 1, sizeof(char));
-		snprintf(buffer, len + 1, "%lf\n", y[i]);
+		snprintf(buffer, sizeof(buffer), "%lf\n", y[i]);
 		strcat(buffer, "\n");
 		fprintf(fptr, "%s", buffer);
 	}
 
+	free(buffer);
 	fclose(fptr);
+	fptr = NULL;
+
 	return 0;
 }
 
@@ -313,11 +316,11 @@ int main(int argc, char *argv[])
 
 	char *output_file = argv[3];
 
-	normal_multi_x *result_X = mean_normal_feature(
+	normal_multi_x *result_X = mean_normal_x(
 		data_set->X, data_set->num_train, data_set->num_feat);
 
 	normal_single_y *result_y =
-		mean_normal_result(data_set->y, data_set->num_train);
+		mean_normal_y(data_set->y, data_set->num_train);
 
 	write_to_file(result_X->X, result_y->y, data_set->num_train,
 		      data_set->num_feat, output_file);
