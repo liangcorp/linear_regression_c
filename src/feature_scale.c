@@ -322,11 +322,9 @@ int main(int argc, char *argv[])
 		      data_set->num_feat, output_file);
 
 	for (int i = 0; i < data_set->num_train; i++) {
-		free(data_set->X[i]); // Free the inner pointers before outer pointers
-	}
-
-	for (int i = 0; i < data_set->num_train; i++) {
-		free(result_X->X[i]); // Free the inner pointers before outer pointers
+		// Free the inner pointers before outer pointers
+		free(data_set->X[i]);
+		free(result_X->X[i]);
 	}
 
 	free(data_set->X);
