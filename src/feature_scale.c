@@ -15,8 +15,8 @@
 #include <malloc.h>
 #include <math.h>
 
-#define MAX_STRING 20
-#define MAX_LINE 600
+#define MAX_STRING_SIZE 20
+#define MAX_LINE_SIZE 600
 
 typedef struct {
 	double **X;
@@ -193,7 +193,7 @@ data_t *read_data_file(char *file_name)
 
 	FILE *fp = NULL;
 
-	char str[MAX_LINE];
+	char str[MAX_LINE_SIZE];
 
 	double **X = NULL; // features
 	double *y = NULL; // results
@@ -214,7 +214,7 @@ data_t *read_data_file(char *file_name)
 
 	// Read the first line and split by ','
 	// Count the number of features via no. of splits
-	if (fgets(str, MAX_LINE, fp) != NULL) {
+	if (fgets(str, MAX_LINE_SIZE, fp) != NULL) {
 		char *token = strtok(str, ",");
 		while (token != NULL) {
 			token = strtok(NULL, ",");
@@ -227,7 +227,7 @@ data_t *read_data_file(char *file_name)
 	X = calloc(1, sizeof(double));
 	y = calloc(1, sizeof(double));
 
-	while (fgets(str, MAX_LINE, fp) != NULL) {
+	while (fgets(str, MAX_LINE_SIZE, fp) != NULL) {
 		// Find number of training set
 		X[i] = calloc((num_feat - 1), sizeof(double));
 		X[i][0] = strtod(strtok(str, ","), NULL);
@@ -274,7 +274,7 @@ int write_to_file(double **x, double *y, int num_train, int num_feat,
 	FILE *fptr = fopen(filename, "w");
 
 	int no_x_feat = num_feat - 1;
-	char *buffer = calloc(MAX_STRING, sizeof(char));
+	char *buffer = calloc(MAX_STRING_SIZE, sizeof(char));
 
 	for (int i = 0; i < num_train; i++) {
 		for (int j = 0; j < no_x_feat; j++) {
