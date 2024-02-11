@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
-#include <math.h>
 
 #define MAX_STRING_SIZE 20
 #define MAX_LINE_SIZE 600
@@ -74,7 +73,7 @@ normal_single_y *mean_normal_y(double *y, int num_train)
 		sum += (y[i] - mean) * (y[i] - mean);
 	}
 
-	std_dev = sqrt(sum / num_train);
+	std_dev = max - min;
 
 	result_v = calloc(num_train, sizeof(double));
 
@@ -143,31 +142,12 @@ normal_multi_x *mean_normal_x(double **X, int num_train, int num_feat)
 
 			sum += X[i][j];
 		}
-		mean[j] = sum;
-	}
+		mean[j] = sum / num_train;
 
-	/* find mean for each feature */
-	for (j = 0; j < no_x_feat; j++) {
-		mean[j] = mean[j] / num_train;
-	}
+		// Calculate the standard deviation for each feature.
+		std_deviation[j] = max[j] - min[j];
 
-	/*
-        Loop from column to row.
-        Calculate the standard deviation for each feature.
-    */
-	for (j = 0; j < no_x_feat; j++) {
-		sum = 0.0L;
-		for (i = 0; i < num_train; i++) {
-			sum += (X[i][j] - mean[j]) * (X[i][j] - mean[j]);
-		}
-		std_deviation[j] = sqrt(sum / num_train);
-	}
-
-	/*
-        set the value of new 2D array to normalized value.
-    */
-
-	for (j = 0; j < no_x_feat; j++) {
+		// set the value of new 2D array to normalized value.
 		for (i = 0; i < num_train; i++) {
 			result_X[i][j] = (X[i][j] - mean[j]) / std_deviation[j];
 		}
