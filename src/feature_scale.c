@@ -40,7 +40,7 @@ normal_single_y *mean_normal_y(double *y, int num_train)
 {
 	int i, j;
 
-    /* Set max and min for feature */
+	/* Set max and min for feature */
 	double max = y[0];
 	double min = y[0];
 
@@ -65,11 +65,11 @@ normal_single_y *mean_normal_y(double *y, int num_train)
 
 	sum = 0.0L;
 
-    result_v = calloc(num_train, sizeof(double));
+	result_v = calloc(num_train, sizeof(double));
 
 	for (i = 0; i < num_train; i++) {
 		sum += (y[i] - mean) * (y[i] - mean);
-        result_v[i] = (y[i] - mean) / (max - min);
+		result_v[i] = (y[i] - mean) / (max - min);
 	}
 
 	result = calloc(1, sizeof(normal_single_y));
@@ -136,7 +136,8 @@ normal_multi_x *mean_normal_x(double **X, int num_train, int num_feat)
 		// standard deviation = max - min.
 		// set the value of new 2D array to normalized value.
 		for (i = 0; i < num_train; i++) {
-			result_X[i][j] = (X[i][j] - mean[j]) / (max[j] - min[j]);
+			result_X[i][j] =
+				(X[i][j] - mean[j]) / (max[j] - min[j]);
 		}
 	}
 
@@ -144,7 +145,7 @@ normal_multi_x *mean_normal_x(double **X, int num_train, int num_feat)
 
 	free(max);
 	free(min);
-    free(mean);
+	free(mean);
 
 	return result;
 }
