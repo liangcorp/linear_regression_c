@@ -26,14 +26,10 @@ typedef struct {
 
 typedef struct {
 	double *y;
-	double mean;
-	double std_deviation;
 } normal_single_y;
 
 typedef struct {
 	double **X;
-	double *mean;
-	double *std_deviation;
 } normal_multi_x;
 
 /*
@@ -44,22 +40,22 @@ normal_single_y *mean_normal_y(double *y, int num_train)
 {
 	int i, j;
 
-	double max, min, mean, std_dev;
+    /* Set max and min for feature */
+	double max = y[0];
+	double min = y[0];
 
+	double mean = 0.0L;
 	double sum = 0.0L;
 
 	double *result_v = NULL;
 	normal_single_y *result = NULL;
 
-	/* Set max and min for feature */
-	max = y[0];
-	min = y[1];
-
 	/* Find max and min for feature */
 	for (i = 0; i < num_train; i++) {
 		if (max < y[i])
 			max = y[i];
-		else if (min > y[i])
+
+		if (min > y[i])
 			min = y[i];
 
 		sum += y[i];
@@ -69,23 +65,16 @@ normal_single_y *mean_normal_y(double *y, int num_train)
 
 	sum = 0.0L;
 
+    result_v = calloc(num_train, sizeof(double));
+
 	for (i = 0; i < num_train; i++) {
 		sum += (y[i] - mean) * (y[i] - mean);
-	}
-
-	std_dev = max - min;
-
-	result_v = calloc(num_train, sizeof(double));
-
-	for (i = 0; i < num_train; i++) {
-		result_v[i] = (y[i] - mean) / std_dev;
+        result_v[i] = (y[i] - mean) / (max - min);
 	}
 
 	result = calloc(1, sizeof(normal_single_y));
 
 	result->y = result_v;
-	result->mean = mean;
-	result->std_deviation = std_dev;
 
 	return result;
 }
@@ -111,7 +100,6 @@ normal_multi_x *mean_normal_x(double **X, int num_train, int num_feat)
 	double *max = calloc(no_x_feat, sizeof(double));
 	double *min = calloc(no_x_feat, sizeof(double));
 	double *mean = calloc(no_x_feat, sizeof(double));
-	double *std_deviation = calloc(no_x_feat, sizeof(double));
 
 	double **result_X = calloc(num_train, sizeof(double));
 
@@ -137,28 +125,26 @@ normal_multi_x *mean_normal_x(double **X, int num_train, int num_feat)
 		for (i = 0; i < num_train; i++) {
 			if (max[j] < X[i][j])
 				max[j] = X[i][j];
-			else if (min[j] > X[i][j])
+
+			if (min[j] > X[i][j])
 				min[j] = X[i][j];
 
 			sum += X[i][j];
 		}
 		mean[j] = sum / num_train;
 
-		// Calculate the standard deviation for each feature.
-		std_deviation[j] = max[j] - min[j];
-
+		// standard deviation = max - min.
 		// set the value of new 2D array to normalized value.
 		for (i = 0; i < num_train; i++) {
-			result_X[i][j] = (X[i][j] - mean[j]) / std_deviation[j];
+			result_X[i][j] = (X[i][j] - mean[j]) / (max[j] - min[j]);
 		}
 	}
 
 	result->X = result_X;
-	result->mean = mean;
-	result->std_deviation = std_deviation;
 
 	free(max);
 	free(min);
+    free(mean);
 
 	return result;
 }
@@ -312,8 +298,6 @@ int main(int argc, char *argv[])
 	free(data_set);
 
 	free(result_X->X);
-	free(result_X->mean);
-	free(result_X->std_deviation);
 	free(result_X);
 
 	free(result_y->y);
