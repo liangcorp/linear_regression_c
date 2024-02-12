@@ -35,21 +35,15 @@ double cost_function(double **X, double *y, double *theta, int num_train,
 
 	double J_theta = 0.0L; /* The cost */
 	double sum = 0.0L;
-	double *h_x = NULL;
-
-	h_x = calloc(num_train, sizeof(double));
 
 	for (i = 0; i < num_train; i++) {
 		sum = 0.0L;
 		for (j = 0; j < num_feat; j++) {
 			sum += X[i][j] * theta[j];
 		}
-		h_x[i] = sum;
-	}
-
-	for (i = 0; i < num_train; i++) {
-		J_theta += (h_x[i] - y[i]) * (h_x[i] - y[i]) /
-			   (2 * (double)num_train);
+		// h_x[i] = sum;
+		J_theta +=
+			(sum - y[i]) * (sum - y[i]) / (2 * (double)num_train);
 	}
 
 #ifdef TIMER
@@ -59,8 +53,6 @@ double cost_function(double **X, double *y, double *theta, int num_train,
 	printf("Cost function completed in %lf seconds\n",
 	       ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
 #endif
-
-	free(h_x);
 
 	return J_theta;
 }
