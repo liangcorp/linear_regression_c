@@ -22,12 +22,28 @@ the equation to :
 `repeat until convergence: {`
 
 $$
-θ_0 := {θ_0 - α{{1 \over m}{\sum_{i=1}^{m}(h_θ(x_i) - y_i)}}}
+θ_0 := {θ_0 - α{{1 \over m}{\sum_{i=1}^{m}(h_θ(x^{(i)}) - y^{(i)}) * x_0^{(i)}}}}
 $$
 
 $$
-θ_1 := {θ_1 - α{{1 \over m}{\sum_{i=1}^{m}(h_θ(x_i) - y_i)}}}
+θ_1 := {θ_1 - α{{1 \over m}{\sum_{i=1}^{m}(h_θ(x^{(i)}) - y^{(i)}) * x_1^{(i)}}}}
 $$
+
+$$
+θ_2 := {θ_2 - α{{1 \over m}{\sum_{i=1}^{m}(h_θ(x^{(i)}) - y^{(i)}) * x_2^{(i)}}}}
+$$
+
+`}`
+
+in other words:
+
+`repeat until convergence:{`
+
+$$
+θ_j := {θ_j - α{{1 \over m}{\sum_{i=1}^{m}(h_θ(x^{(i)}) - y^{(i)}) * x_j^{(i)}}}}
+$$
+
+$for j:= 0...n$
 
 `}`
 
