@@ -66,6 +66,9 @@ too large) to the global minimum. Indeed, $J$ is a convex quadratic function.
 Here is an example of gradient descent as it is run to minimize a quadratic
 function.
 
+![gradient_descent](https://github.com/liangcorp/machine_learning_c/assets/2737157/3b5f0e81-3de5-40e1-8fbf-4e064379a7b4)
+
+
 The ellipses shown above are the contours of a quadratic function. Also shown
 is the trajectory taken by gradient descent, which was initialized at (48,30).
 The $x$'s in the figure (joined by straight lines) mark the successive values
