@@ -39,12 +39,15 @@ for a single example:
 $$
 {∂ \over ∂θ_j}{J(θ)} = {∂ \over ∂θ_j}{1 \over 2}{(h_θ(x) - y)^2}
 $$
+
 $$
 = 2 * {1 \over 2}(h_θ(x) - y) * {∂ \over ∂θ_j}{(h_θ(x) - y)}
 $$
+
 $$
 = (h_θ(x) - y) * {∂ \over ∂θ_j}({\sum_{i=0}^{n}}θ_ix_i - y)
 $$
+
 $$
 = (h_θ(x) - y)x_j
 $$
