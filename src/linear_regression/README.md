@@ -19,6 +19,8 @@ of the gradient descent equation can be derived. We can substitute our
 actual cost function and our actual hypothesis function and modify
 the equation to :
 
+`repeat until convergence: {`
+
 $$
 θ_0 := {θ_0 - α{{1 \over m}{\sum_{i=1}^{m}(h_θ(x_i) - y_i)}}}
 $$
@@ -26,6 +28,8 @@ $$
 $$
 θ_1 := {θ_1 - α{{1 \over m}{\sum_{i=1}^{m}(h_θ(x_i) - y_i)}}}
 $$
+
+`}`
 
 Where $m$ is the size of the training set, $θ_0$ constant that will be
 changing simultaneously with $θ_1$ and $x_i,y_i$ are values of the
