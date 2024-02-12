@@ -22,24 +22,16 @@ double *gradient_desent(double **X, double *y, double *theta, float alpha,
 	int i, j;
 
 	double sum = 0.0L;
-	double *tmp_theta = calloc(num_feat, sizeof(double));
 	double *h_x = calloc(num_train, sizeof(double));
 	double *final_theta = calloc(num_feat, sizeof(double));
 
-	for (j = 0; j < num_feat; j++) {
-		tmp_theta[j] = theta[j];
-	}
-
+    //  gradient descent
 	while (num_iters > 0) {
 		memset(h_x, 0.0L, num_train * sizeof(double));
 
-		for (j = 0; j < num_feat; j++) {
-			tmp_theta[j] = theta[j];
-		}
-
 		for (i = 0; i < num_train; i++) {
 			for (j = 0; j < num_feat; j++) {
-				h_x[i] += tmp_theta[j] * X[i][j];
+				h_x[i] += theta[j] * X[i][j];
 			}
 		}
 
@@ -50,8 +42,7 @@ double *gradient_desent(double **X, double *y, double *theta, float alpha,
 				sum += (h_x[i] - y[i]) * X[i][j];
 			}
 
-			theta[j] = tmp_theta[j] -
-				   (alpha * sum / (double)num_train);
+			theta[j] = theta[j] - (alpha * sum / (double)num_train);
 		}
 
 		num_iters--;
@@ -62,7 +53,6 @@ double *gradient_desent(double **X, double *y, double *theta, float alpha,
 	}
 
 	free(h_x);
-	free(tmp_theta);
 
 #ifdef TIMER
 
