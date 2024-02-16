@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
 
 		printf("Calculating thetas...\n");
 	} else {
-        printf("sample cost function only support single feature...skipping...\n");
-    }
+		printf("sample cost function only support single feature...skipping...\n");
+	}
 
 	float alpha = 0.1;
 	int num_iters = 10000;
