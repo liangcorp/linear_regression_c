@@ -18,9 +18,6 @@
 
 int main(int argc, char *argv[])
 {
-#ifdef TIMER
-	clock_t cpu_start = clock(); /* Initial processor time */
-#endif
 	data_t *data_set = NULL;
 
 	int i;
@@ -100,13 +97,6 @@ int main(int argc, char *argv[])
 
 #ifdef DEBUG
 	printf("Freed all memory\n");
-#endif
-#ifdef TIMER
-
-	clock_t cpu_end = clock(); /* Final CPU time */
-
-	printf("main completed in %lf seconds\n",
-	       ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
 #endif
 
 	return 0;
