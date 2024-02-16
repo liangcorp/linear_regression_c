@@ -13,6 +13,19 @@
 #include <string.h>
 #include "machine_learning.h"
 
+/*
+# Gradient descent
+
+ - X and y are the training sets.
+ - alpha is the learning rate
+ - theta is a chosen number.
+
+## Implement the following matlab formula:
+
+
+ theta(indx,:) = theta(indx,:) -
+                 alpha * ((((temp[] * X[]) - y[]) * X(:,indx))/m);
+*/
 double *gradient_desent(double **X, double *y, double *theta, float alpha,
 			int num_train, int num_feat, int iterations)
 {
@@ -21,7 +34,7 @@ double *gradient_desent(double **X, double *y, double *theta, float alpha,
 	double sum = 0.0L;
 	double *h_x = calloc(num_train, sizeof(double));
 
-    //  gradient descent
+	//  gradient descent
 	while (iterations > 0) {
 		memset(h_x, 0.0L, num_train * sizeof(double));
 
