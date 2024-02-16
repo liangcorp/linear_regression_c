@@ -11,3 +11,5 @@ Detail explanation can be found [here](https://github.com/liangcorp/machine_lear
 ## Logistical Regression
 
 Detail explanation can be found [here](https://github.com/liangcorp/ml_c/tree/main/src/logistic_regression)
+
+@TODO: in progress
