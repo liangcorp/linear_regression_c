@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
 	printf("Found thetas using Gradient Descent: [");
 
-	for (i = 0; i < num_feat; i++) {
+	for (i = 1; i < num_feat; i++) {
 		printf("%lf ", final_theta[i]);
 	}
 	printf("]\n");
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	double *final_theta_ne = normal_equation(X, y, num_train, num_feat);
 	printf("Found thetas using Normal Equation: [");
 
-	for (i = 0; i < num_feat; i++) {
+	for (i = 1; i < num_feat; i++) {
 		printf("%lf ", final_theta_ne[i]);
 	}
 	printf("]\n");
@@ -91,7 +91,6 @@ int main(int argc, char *argv[])
 	free(X);
 	free(y);
 	free(theta);
-	free(final_theta);
 	free(final_theta_ne);
 	free(data_set);
 

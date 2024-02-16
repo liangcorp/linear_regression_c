@@ -1,5 +1,40 @@
 # Linear Regression Function
 
+## Model Representation
+
+To establish notation for future use, we'll use $x^{(i)}$ to denote the "input"
+variables (living area in this example), also called input features,
+and $y^{(i)}$ to denote the "output" or target variable that we are trying
+to predict (price). A pair $(x^{(i)},y^{(i)})$ is called a training example,
+and the dataset that we'll be using to learn—a list of m training
+examples $(x^{(i)},y^{(i)});i=1,...,m$—is called a training set. Note that
+the superscript "$(i)$" in the notation is simply an index into the training
+set, and has nothing to do with exponentiation. We will also use $X$ to
+denote the space of input values, and $Y$ to denote the space of output
+values. In this example, $X = Y = ℝ$.
+
+$$
+h_θ(x) = θ_0x^{(0)} + θ_1x^{(1)} + ... + θ_ix^{(i)}
+$$
+
+$$
+x^{(0)} = 1.0
+$$
+
+To describe the supervised learning problem slightly more formally, our goal
+is, given a training set, to learn a function $h : X → Y$ so that $h(x)$ is a
+"good" predictor for the corresponding value of $y$. For historical reasons,
+this function $h$ is called a hypothesis. Seen pictorially, the process is
+therefore like this:
+
+![H6qTdZmYEeaagxL7xdFKxA_2f0f671110e8f7446bb2b5b2f75a8874_Screenshot-2016-10-23-20 14 58](https://github.com/liangcorp/machine_learning_rust/assets/2737157/dd86f847-2c3b-4efd-ae57-284c1d266376)
+
+When the target variable that we're trying to predict is continuous, such as
+in our housing example, we call the learning problem a regression problem.
+When $y$ can take on only some discrete values (such as if,
+given the living area, we wanted to predict if a dwelling is a house or an
+apartment, say), we call it a classification problem.
+
 ## Cost Function
 
 We can measure the accuracy of our hypothesis function by using a cost function.
@@ -86,7 +121,7 @@ too large) to the global minimum. Indeed, $J$ is a convex quadratic function.
 Here is an example of gradient descent as it is run to minimize a quadratic
 function.
 
-![gradient_descent](https://github.com/liangcorp/machine_learning_c/assets/2737157/3b5f0e81-3de5-40e1-8fbf-4e064379a7b4)
+![Gradient_descent](https://github.com/liangcorp/machine_learning_c/assets/2737157/3b5f0e81-3de5-40e1-8fbf-4e064379a7b4)
 
 The ellipses shown above are the contours of a quadratic function. Also shown
 is the trajectory taken by gradient descent, which was initialized at (48,30).
@@ -106,7 +141,7 @@ $$
 θ = (X^TX)^{-1}X^Ty
 $$
 
-![dykma6dwEea3qApInhZCFg_333df5f11086fee19c4fb81bc34d5125_Screenshot-2016-11-10-10 06 16](https://github.com/liangcorp/machine_learning_c/assets/2737157/b8e17281-35c9-44db-86f9-6e0ed5f25412)
+![dykma6dwEea3qApInhZCFg_333df5f11086fee19c4fb81bc34d5125_Screenshot-2016-11-10-10 06 16](https://github.com/liangcorp/machine_learning_rust/assets/2737157/babdc838-56d3-4e6d-b3f3-a3bef1d8dd9e)
 
 There is no need to do feature scaling with the normal equation.
 
