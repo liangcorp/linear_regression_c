@@ -41,19 +41,24 @@ int main(int argc, char *argv[])
 
 	double *theta = calloc(num_feat, sizeof(double));
 
-    printf("Cost function test...\n");
-	printf("Thetas are [0.0, 0.0]. The cost is %lf\n",
-	       cost_function(X, y, theta, num_train, num_feat));
+	if (num_feat < 2) {
+		printf("Cost function test...\n");
+		printf("Thetas are [0.0, 0.0]. The cost is %lf\n",
+		       cost_function(X, y, theta, num_train, num_feat));
 
-	theta[0] = -1.0;
-	theta[1] = 2.0;
+		theta[0] = -1.0;
+		theta[1] = 2.0;
 
-	printf("Thetas are [-1.0, 2.0]. The cost is %lf\n",
-	       cost_function(X, y, theta, num_train, num_feat));
+		printf("Thetas are [-1.0, 2.0]. The cost is %lf\n",
+		       cost_function(X, y, theta, num_train, num_feat));
 
-    printf("Calculating thetas...\n");
-	float alpha = 0.01;
-	int num_iters = 1500;
+		printf("Calculating thetas...\n");
+	} else {
+        printf("sample cost function only support single feature...skipping...\n");
+    }
+
+	float alpha = 0.1;
+	int num_iters = 10000;
 
 	theta[0] = 0.0;
 	theta[1] = 0.0;

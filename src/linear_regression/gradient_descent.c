@@ -14,7 +14,7 @@
 #include "machine_learning.h"
 
 double *gradient_desent(double **X, double *y, double *theta, float alpha,
-			int num_train, int num_feat, int num_iters)
+			int num_train, int num_feat, int iterations)
 {
 #ifdef TIMER
 	clock_t cpu_start = clock(); /* Initial processor time */
@@ -26,7 +26,7 @@ double *gradient_desent(double **X, double *y, double *theta, float alpha,
 	double *final_theta = calloc(num_feat, sizeof(double));
 
     //  gradient descent
-	while (num_iters > 0) {
+	while (iterations > 0) {
 		memset(h_x, 0.0L, num_train * sizeof(double));
 
 		for (i = 0; i < num_train; i++) {
@@ -45,7 +45,7 @@ double *gradient_desent(double **X, double *y, double *theta, float alpha,
 			theta[j] = theta[j] - (alpha * sum / (double)num_train);
 		}
 
-		num_iters--;
+		iterations--;
 	}
 
 	for (i = 0; i < num_feat; i++) {
