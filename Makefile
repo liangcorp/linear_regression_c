@@ -2,7 +2,7 @@ CC = clang
 
 all:
 	mkdir -p bin libs
-	${CC} -g -fPIC ./src/read_from_data_file.c -shared -o ./libs/libreaddata.so
+	${CC} -g -fPIC ./src/read_from_data_file.c -I ./src/include/ -shared -o ./libs/libreaddata.so
 	${CC} -g -fPIC ./src/linear_regression/cost_function.c -I ./src/include/ -shared -o ./libs/liblrcostfn.so
 	${CC} -g -fPIC ./src/linear_regression/gradient_descent.c -I ./src/include/ -shared -o ./libs/liblrgrades.so
 	${CC} -g -fPIC ./src/linear_regression/normal_equation.c -I ./src/include/ -shared -o ./libs/liblrnormalequation.so
@@ -14,7 +14,7 @@ all:
 
 debug:
 	mkdir -p bin libs
-	${CC} -D DEBUG -g -fPIC ./src/read_from_data_file.c -shared -o ./libs/libreaddata.so
+	${CC} -D DEBUG -g -fPIC ./src/read_from_data_file.c -I ./src/include/ -shared -o ./libs/libreaddata.so
 	${CC} -D DEBUG -g -fPIC ./src/linear_regression/cost_function.c -I ./src/include/ -shared -o ./libs/liblrcostfn.so
 	${CC} -D DEBUG -g -fPIC ./src/linear_regression/gradient_descent.c -I ./src/include/ -shared -o ./libs/liblrgrades.so
 	${CC} -D DEBUG -g -fPIC ./src/linear_regression/normal_equation.c -I ./src/include/ -shared -o ./libs/liblrnormalequation.so
@@ -26,7 +26,7 @@ debug:
 
 release:
 	mkdir -p bin libs
-	${CC} -fPIC ./src/read_from_data_file.c -shared -o ./libs/libreaddata.so
+	${CC} -fPIC ./src/read_from_data_file.c -I ./src/include/ -shared -o ./libs/libreaddata.so
 	${CC} -fPIC ./src/linear_regression/cost_function.c -I ./src/include/ -shared -o ./libs/liblrcostfn.so
 	${CC} -fPIC ./src/linear_regression/gradient_descent.c -I ./src/include/ -shared -o ./libs/liblrgrades.so
 	${CC} -fPIC ./src/linear_regression/normal_equation.c -I ./src/include/ -shared -o ./libs/liblrnormalequation.so

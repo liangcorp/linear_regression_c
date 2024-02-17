@@ -13,13 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
-
-typedef struct {
-	double **X;
-	double *y;
-	int num_train;
-	int num_feat;
-} data_t;
+#include "machine_learning.h"
 
 // Function name is the same of the source code file name.
 // This is for convenient purpose.
