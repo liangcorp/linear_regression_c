@@ -16,6 +16,9 @@
 
 #include "machine_learning.h"
 
+#define ALPHA 0.1
+#define ITERATIONS 30000
+
 int main(int argc, char *argv[])
 {
 	data_t *data_set = NULL;
@@ -54,14 +57,14 @@ int main(int argc, char *argv[])
 		printf("sample cost function only support single feature...skipping...\n");
 	}
 
-	float alpha = 0.1;
-	int num_iters = 10000;
+	// float alpha = 0.1;
+	// int num_iters = 30000;
 
 	theta[0] = 0.0;
 	theta[1] = 0.0;
 
-	double *final_theta = gradient_descent(X, y, theta, alpha, num_train,
-					      num_feat, num_iters);
+	double *final_theta = gradient_descent(X, y, theta, ALPHA, num_train,
+					      num_feat, ITERATIONS);
 
 	printf("Found thetas using Gradient Descent: [");
 
@@ -70,13 +73,13 @@ int main(int argc, char *argv[])
 	}
 	printf("]\n");
 
-	double *final_theta_ne = normal_equation(X, y, num_train, num_feat);
-	printf("Found thetas using Normal Equation: [");
-
-	for (i = 1; i < num_feat; i++) {
-		printf("%lf ", final_theta_ne[i]);
-	}
-	printf("]\n");
+	// double *final_theta_ne = normal_equation(X, y, num_train, num_feat);
+	// printf("Found thetas using Normal Equation: [");
+	//
+	// for (i = 1; i < num_feat; i++) {
+	// 	printf("%lf ", final_theta_ne[i]);
+	// }
+	// printf("]\n");
 
 	/*
     normal_single_t* result_y = mean_normal_single(y, num_train);
@@ -91,7 +94,7 @@ int main(int argc, char *argv[])
 	free(X);
 	free(y);
 	free(theta);
-	free(final_theta_ne);
+	// free(final_theta_ne);
 	free(data_set);
 
 #ifdef DEBUG
