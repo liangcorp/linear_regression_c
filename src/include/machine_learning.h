@@ -23,7 +23,7 @@ data_t *read_from_data_file(char *file_name);
 double cost_function(double **X, double *y, double *theta, int no_train,
 		     int no_feat);
 
-double *gradient_desent(double **X, double *y, double *theta, float alpha,
+double *gradient_descent(double **X, double *y, double *theta, float alpha,
 			int num_train, int num_feat, int num_iters);
 
 double get_determinant(double **matrix, unsigned int m_size);

@@ -26,7 +26,7 @@
  theta(indx,:) = theta(indx,:) -
                  alpha * ((((temp[] * X[]) - y[]) * X(:,indx))/m);
 */
-double *gradient_desent(double **X, double *y, double *theta, float alpha,
+double *gradient_descent(double **X, double *y, double *theta, float alpha,
 			int num_train, int num_feat, int iterations)
 {
 	int i, j;
