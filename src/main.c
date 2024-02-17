@@ -16,7 +16,6 @@
 
 #include "machine_learning.h"
 
-const float alpha = 0.02;
 const int num_iters = 5000;
 
 int main(int argc, char *argv[])
@@ -30,6 +29,8 @@ int main(int argc, char *argv[])
 
 	double **X = NULL; // features
 	double *y = NULL; // results
+
+	float alpha = 0.0;
 
 	// Get data set from data file
 	data_set = read_from_data_file(argv[1]);
@@ -55,6 +56,11 @@ int main(int argc, char *argv[])
 
 	theta[0] = 0.0;
 	theta[1] = 0.0;
+
+	if (num_feat < 3)
+		alpha = 0.01;
+	else
+		alpha = num_feat / 10.0;
 
 	double *final_theta = gradient_descent(X, y, theta, alpha, num_train,
 					       num_feat, num_iters);
