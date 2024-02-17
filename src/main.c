@@ -16,8 +16,8 @@
 
 #include "machine_learning.h"
 
-#define ALPHA 0.1
-#define ITERATIONS 30000
+const float alpha = 0.02;
+const int num_iters = 5000;
 
 int main(int argc, char *argv[])
 {
@@ -41,48 +41,38 @@ int main(int argc, char *argv[])
 
 	double *theta = calloc(num_feat, sizeof(double));
 
-	if (num_feat < 2) {
-		printf("Cost function test...\n");
-		printf("Thetas are [0.0, 0.0]. The cost is %lf\n",
-		       cost_function(X, y, theta, num_train, num_feat));
+	printf("Cost function test...\n");
+	printf("Thetas are [0.0, 0.0]. The cost is %lf\n",
+	       cost_function(X, y, theta, num_train, num_feat));
 
-		theta[0] = -1.0;
-		theta[1] = 2.0;
+	theta[0] = -1.0;
+	theta[1] = 2.0;
 
-		printf("Thetas are [-1.0, 2.0]. The cost is %lf\n",
-		       cost_function(X, y, theta, num_train, num_feat));
+	printf("Thetas are [-1.0, 2.0]. The cost is %lf\n",
+	       cost_function(X, y, theta, num_train, num_feat));
 
-		printf("Calculating thetas...\n");
-	} else {
-		printf("sample cost function only support single feature...skipping...\n");
-	}
+	printf("Calculating thetas...\n");
 
 	theta[0] = 0.0;
 	theta[1] = 0.0;
 
-	double *final_theta = gradient_descent(X, y, theta, ALPHA, num_train,
-					      num_feat, ITERATIONS);
+	double *final_theta = gradient_descent(X, y, theta, alpha, num_train,
+					       num_feat, num_iters);
 
 	printf("Found thetas using Gradient Descent: [");
 
-	for (i = 1; i < num_feat; i++) {
+	for (i = 0; i < num_feat; i++) {
 		printf("%lf ", final_theta[i]);
 	}
 	printf("]\n");
 
-	// double *final_theta_ne = normal_equation(X, y, num_train, num_feat);
-	// printf("Found thetas using Normal Equation: [");
-	//
-	// for (i = 1; i < num_feat; i++) {
-	// 	printf("%lf ", final_theta_ne[i]);
-	// }
-	// printf("]\n");
+	double *final_theta_ne = normal_equation(X, y, num_train, num_feat);
+	printf("Found thetas using Normal Equation: [");
 
-	/*
-    normal_single_t* result_y = mean_normal_single(y, num_train);
-    free(result_y->v);
-    free(result_y);
-    */
+	for (i = 0; i < num_feat; i++) {
+		printf("%lf ", final_theta_ne[i]);
+	}
+	printf("]\n");
 
 	for (i = 0; i < num_train; i++) {
 		free(X[i]); // Free the inner pointers before outer pointers
@@ -91,7 +81,8 @@ int main(int argc, char *argv[])
 	free(X);
 	free(y);
 	free(theta);
-	// free(final_theta_ne);
+	free(final_theta);
+	free(final_theta_ne);
 	free(data_set);
 
 #ifdef DEBUG

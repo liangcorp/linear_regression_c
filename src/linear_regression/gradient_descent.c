@@ -13,29 +13,20 @@
 #include <string.h>
 #include "machine_learning.h"
 
-/*
-# Gradient descent
-
- - X and y are the training sets.
- - alpha is the learning rate
- - theta is a chosen number.
-
-## Implement the following matlab formula:
-
-
- theta(indx,:) = theta(indx,:) -
-                 alpha * ((((temp[] * X[]) - y[]) * X(:,indx))/m);
-*/
-double *gradient_desent(double **X, double *y, double *theta, float alpha,
-			int num_train, int num_feat, int iterations)
+double *gradient_descent(double **X, double *y, double *theta, float alpha,
+			int num_train, int num_feat, int num_iters)
 {
+#ifdef TIMER
+	clock_t cpu_start = clock(); /* Initial processor time */
+#endif
 	int i, j;
 
 	double sum = 0.0L;
 	double *h_x = calloc(num_train, sizeof(double));
+	double *final_theta = calloc(num_feat, sizeof(double));
 
-	//  gradient descent
-	while (iterations > 0) {
+    //  gradient descent
+	while (num_iters > 0) {
 		memset(h_x, 0.0L, num_train * sizeof(double));
 
 		for (i = 0; i < num_train; i++) {
@@ -54,10 +45,21 @@ double *gradient_desent(double **X, double *y, double *theta, float alpha,
 			theta[j] = theta[j] - (alpha * sum / (double)num_train);
 		}
 
-		iterations--;
+		num_iters--;
+	}
+
+	for (i = 0; i < num_feat; i++) {
+		final_theta[i] = theta[i];
 	}
 
 	free(h_x);
 
-	return theta;
+#ifdef TIMER
+
+	clock_t cpu_end = clock(); /* Final cpu time */
+
+	printf("Gradient descent completed in %lf seconds\n",
+	       ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
+#endif
+	return final_theta;
 }
