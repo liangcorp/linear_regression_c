@@ -57,9 +57,6 @@ int main(int argc, char *argv[])
 		printf("sample cost function only support single feature...skipping...\n");
 	}
 
-	// float alpha = 0.1;
-	// int num_iters = 30000;
-
 	theta[0] = 0.0;
 	theta[1] = 0.0;
 
