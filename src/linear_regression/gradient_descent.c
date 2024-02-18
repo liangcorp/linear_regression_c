@@ -16,9 +16,6 @@
 double *gradient_descent(double **X, double *y, double *theta, float alpha,
 			int num_train, int num_feat, int num_iters)
 {
-#ifdef TIMER
-	clock_t cpu_start = clock(); /* Initial processor time */
-#endif
 	int i, j;
 
 	double sum = 0.0L;
@@ -53,13 +50,5 @@ double *gradient_descent(double **X, double *y, double *theta, float alpha,
 	}
 
 	free(h_x);
-
-#ifdef TIMER
-
-	clock_t cpu_end = clock(); /* Final cpu time */
-
-	printf("Gradient descent completed in %lf seconds\n",
-	       ((double)(cpu_end - cpu_start)) / CLOCKS_PER_SEC);
-#endif
 	return final_theta;
 }

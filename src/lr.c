@@ -13,10 +13,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
+#include <time.h>
 
 #include "machine_learning.h"
 
-const int iterations = 5000;    // no of iterations
+const int iterations = 5000; // no of iterations
 
 int main(int argc, char *argv[])
 {
@@ -30,10 +31,21 @@ int main(int argc, char *argv[])
 	double **X = NULL; // features
 	double *y = NULL; // results
 
-	float alpha = 0.0;      // learning step size
+	float alpha = 0.0; // learning step size
 
+#ifdef TIMER
+	clock_t file_read_cpu_start = clock(); /* Initial processor time */
+#endif
 	// Get data set from data file
 	data_set = read_from_data_file(argv[1]);
+#ifdef TIMER
+
+	clock_t file_read_cpu_end = clock(); /* Final cpu time */
+
+	printf("File read in %lf seconds\n",
+	       ((double)(file_read_cpu_end - file_read_cpu_start)) /
+		       CLOCKS_PER_SEC);
+#endif
 
 	X = data_set->X;
 	y = data_set->y;
@@ -62,12 +74,25 @@ int main(int argc, char *argv[])
 	else
 		alpha = num_feat / 10.0;
 
+#ifdef TIMER
+	clock_t gradient_descent_cpu_start =
+		clock(); /* Initial processor time */
+#endif
 	double *final_theta = gradient_descent(X, y, theta, alpha, num_train,
 					       num_feat, iterations);
+#ifdef TIMER
 
-	printf("Found thetas using Gradient Descent: [");
+	clock_t gradient_descent_cpu_end = clock(); /* Final cpu time */
 
-	for (i = 0; i < num_feat; i++) {
+	printf("Gradient descent completed in %lf seconds\n",
+	       ((double)(gradient_descent_cpu_end -
+			 gradient_descent_cpu_start)) /
+		       CLOCKS_PER_SEC);
+#endif
+
+	printf("Found thetas using Gradient Descent: [ ");
+
+	for (i = 1; i < num_feat; i++) {
 		printf("%lf ", final_theta[i]);
 	}
 	printf("]\n");
