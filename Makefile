@@ -1,7 +1,7 @@
 CC = clang
 
 all:
-	mkdir -p bin libs/linear_regression libs/logistical_regression
+	mkdir -p bin libs
 	${CC} -g -fPIC ./src/read_from_data_file.c -I ./src/include/ -shared -o ./libs/libreaddata.so
 	${CC} -g -fPIC ./src/linear_regression/cost_function.c -I ./src/include/ -shared -o ./libs/liblrcostfn.so
 	${CC} -g -fPIC ./src/linear_regression/gradient_descent.c -I ./src/include/ -shared -o ./libs/liblrgrades.so
@@ -57,5 +57,5 @@ static:
 	chmod +x ./bin/*
 
 clean:
-	rm -rf ./bin/*
-	rm -rf ./libs/*
+	rm -rf ./bin
+	rm -rf ./libs
