@@ -42,20 +42,20 @@ int main(int argc, char *argv[])
 
 	double *theta = calloc(num_feat, sizeof(double));
 
-	printf("Cost function test...\n");
-	printf("Thetas are [0.0, 0.0]. The cost is %lf\n",
-	       cost_function(X, y, theta, num_train, num_feat));
-
-	theta[0] = -1.0;
-	theta[1] = 2.0;
-
-	printf("Thetas are [-1.0, 2.0]. The cost is %lf\n",
-	       cost_function(X, y, theta, num_train, num_feat));
-
-	printf("Calculating thetas...\n");
-
-	theta[0] = 0.0;
-	theta[1] = 0.0;
+	// printf("Cost function test...\n");
+	// printf("Thetas are [0.0, 0.0]. The cost is %lf\n",
+	//        cost_function(X, y, theta, num_train, num_feat));
+	//
+	// theta[0] = -1.0;
+	// theta[1] = 2.0;
+	//
+	// printf("Thetas are [-1.0, 2.0]. The cost is %lf\n",
+	//        cost_function(X, y, theta, num_train, num_feat));
+	//
+	// printf("Calculating thetas...\n");
+	//
+	// theta[0] = 0.0;
+	// theta[1] = 0.0;
 
 	if (num_feat < 3)
 		alpha = 0.01;
@@ -72,23 +72,23 @@ int main(int argc, char *argv[])
 	}
 	printf("]\n");
 
-	double *final_theta_ne = normal_equation(X, y, num_train, num_feat);
-	printf("Found thetas using Normal Equation: [");
-
-	for (i = 0; i < num_feat; i++) {
-		printf("%lf ", final_theta_ne[i]);
-	}
-	printf("]\n");
-
-	for (i = 0; i < num_train; i++) {
-		free(X[i]); // Free the inner pointers before outer pointers
-	}
+	// double *final_theta_ne = normal_equation(X, y, num_train, num_feat);
+	// printf("Found thetas using Normal Equation: [");
+	//
+	// for (i = 0; i < num_feat; i++) {
+	// 	printf("%lf ", final_theta_ne[i]);
+	// }
+	// printf("]\n");
+	//
+	// for (i = 0; i < num_train; i++) {
+	// 	free(X[i]); // Free the inner pointers before outer pointers
+	// }
 
 	free(X);
 	free(y);
 	free(theta);
 	free(final_theta);
-	free(final_theta_ne);
+	// free(final_theta_ne);
 	free(data_set);
 
 #ifdef DEBUG
