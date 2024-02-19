@@ -80,10 +80,10 @@ int main(int argc, char *argv[])
 	// }
 	// printf("]\n");
 	//
-	// for (i = 0; i < num_train; i++) {
-	// 	free(X[i]); // Free the inner pointers before outer pointers
-	// }
 
+	for (i = 0; i < num_train; i++) {
+		free(X[i]); // Free the inner pointers before outer pointers
+	}
 	free(X);
 	free(y);
 	free(theta);
