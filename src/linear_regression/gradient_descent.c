@@ -20,7 +20,6 @@ double *gradient_descent(double **X, double *y, double *theta, float alpha,
 
 	double sum = 0.0L;
 	double *h_x = calloc(num_train, sizeof(double));
-	// double *final_theta = calloc(num_feat, sizeof(double));
 
 	//  gradient descent
 	while (num_iters > 0) {
@@ -44,10 +43,6 @@ double *gradient_descent(double **X, double *y, double *theta, float alpha,
 
 		num_iters--;
 	}
-
-	// for (i = 0; i < num_feat; i++) {
-	// 	final_theta[i] = theta[i];
-	// }
 
 	free(h_x);
 	return theta;
