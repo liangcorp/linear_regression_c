@@ -62,12 +62,13 @@ int main(int argc, char *argv[])
 	else
 		alpha = num_feat / 10.0;
 
+    // *final_theta is the same as *theta. Not need to free
 	double *final_theta = gradient_descent(X, y, theta, alpha, num_train,
 					       num_feat, num_iters);
 
-	printf("Found thetas using Gradient Descent: [");
+	printf("Found thetas using Gradient Descent: [ ");
 
-	for (i = 0; i < num_feat; i++) {
+	for (i = 1; i < num_feat; i++) {
 		printf("%lf ", final_theta[i]);
 	}
 	printf("]\n");
@@ -87,7 +88,6 @@ int main(int argc, char *argv[])
 	free(X);
 	free(y);
 	free(theta);
-	free(final_theta);
 	// free(final_theta_ne);
 	free(data_set);
 

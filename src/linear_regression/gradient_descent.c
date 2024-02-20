@@ -14,15 +14,15 @@
 #include "machine_learning.h"
 
 double *gradient_descent(double **X, double *y, double *theta, float alpha,
-			int num_train, int num_feat, int num_iters)
+			 int num_train, int num_feat, int num_iters)
 {
 	int i, j;
 
 	double sum = 0.0L;
 	double *h_x = calloc(num_train, sizeof(double));
-	double *final_theta = calloc(num_feat, sizeof(double));
+	// double *final_theta = calloc(num_feat, sizeof(double));
 
-    //  gradient descent
+	//  gradient descent
 	while (num_iters > 0) {
 		memset(h_x, 0.0L, num_train * sizeof(double));
 
@@ -45,10 +45,10 @@ double *gradient_descent(double **X, double *y, double *theta, float alpha,
 		num_iters--;
 	}
 
-	for (i = 0; i < num_feat; i++) {
-		final_theta[i] = theta[i];
-	}
+	// for (i = 0; i < num_feat; i++) {
+	// 	final_theta[i] = theta[i];
+	// }
 
 	free(h_x);
-	return final_theta;
+	return theta;
 }
