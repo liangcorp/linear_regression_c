@@ -38,7 +38,7 @@ typedef struct {
  */
 normal_single_y *mean_normal_y(double *y, int num_train)
 {
-	int i, j;
+	int i;
 
 	/* Set max and min for feature */
 	double max = y[0];
