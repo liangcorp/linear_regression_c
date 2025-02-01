@@ -241,11 +241,11 @@ int write_to_file(double **x, double *y, int num_train, int num_feat,
 
 	for (int i = 0; i < num_train; i++) {
 		for (int j = 0; j < no_x_feat; j++) {
-			snprintf(buffer, sizeof(buffer), "%lf", x[i][j]);
+			snprintf(buffer, sizeof(buffer) + 1, "%lf", x[i][j]);
 			strcat(buffer, ",");
 			fprintf(fptr, "%s", buffer);
 		}
-		snprintf(buffer, sizeof(buffer), "%lf\n", y[i]);
+		snprintf(buffer, sizeof(buffer) + 1, "%lf", y[i]);
 		strcat(buffer, "\n");
 		fprintf(fptr, "%s", buffer);
 	}
