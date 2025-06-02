@@ -11,10 +11,9 @@
 
 #include "machine_learning.h"
 
-double cost_function(double **X, double *y, double *theta, int num_train,
-		     int num_feat)
+double cost_function(double **X, double *y, double *theta, int num_train, int num_feat)
 {
-	/*
+    /*
         Creating the algorithm for the cost function.
         X and y are the training sets.
         theta is a chosen number.
@@ -28,20 +27,21 @@ double cost_function(double **X, double *y, double *theta, int num_train,
 
      */
 
-	int i, j;
+    int i, j;
 
-	double J_theta = 0.0L; /* The cost */
-	double sum = 0.0L;
+    double J_theta = 0.0L; /* The cost */
+    double sum = 0.0L;
 
-	for (i = 0; i < num_train; i++) {
-		sum = 0.0L;
-		for (j = 0; j < num_feat; j++) {
-			sum += X[i][j] * theta[j];
-		}
-		// h_x[i] = sum;
-		J_theta +=
-			(sum - y[i]) * (sum - y[i]) / (2 * (double)num_train);
-	}
+    for (i = 0; i < num_train; i++)
+    {
+        sum = 0.0L;
+        for (j = 0; j < num_feat; j++)
+        {
+            sum += X[i][j] * theta[j];
+        }
+        // h_x[i] = sum;
+        J_theta += (sum - y[i]) * (sum - y[i]) / (2 * (double)num_train);
+    }
 
-	return J_theta;
+    return J_theta;
 }
