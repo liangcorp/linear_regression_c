@@ -330,7 +330,8 @@ double **get_invert(double **matrix, unsigned int size)
      - Slow if number of features is very large (10,000+)
  */
 
-double *normal_equation(double **X, double *y, unsigned int num_train, unsigned int num_feat)
+double *normal_equation(double **X, double *y, unsigned int num_train,
+                        unsigned int num_feat)
 {
     unsigned int i, j, z;
     double *theta = NULL;

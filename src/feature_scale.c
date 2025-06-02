@@ -292,11 +292,13 @@ int main(int argc, char *argv[])
 
     char *output_file = argv[3];
 
-    normal_multi_x *result_X = mean_normal_x(data_set->X, data_set->num_train, data_set->num_feat);
+    normal_multi_x *result_X =
+        mean_normal_x(data_set->X, data_set->num_train, data_set->num_feat);
 
     normal_single_y *result_y = mean_normal_y(data_set->y, data_set->num_train);
 
-    write_to_file(result_X->X, result_y->y, data_set->num_train, data_set->num_feat, output_file);
+    write_to_file(result_X->X, result_y->y, data_set->num_train, data_set->num_feat,
+                  output_file);
 
     for (int i = 0; i < data_set->num_train; i++)
     {
