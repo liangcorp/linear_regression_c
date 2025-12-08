@@ -9,8 +9,6 @@
  *
  */
 
-#include <malloc.h>
-
 typedef struct
 {
     double **X;
