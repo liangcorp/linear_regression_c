@@ -74,7 +74,8 @@ int main(int argc, char *argv[])
 	else
 		alpha = num_feat / 10.0;
 
-	final_theta = gradient_descent(X, y, theta, alpha, num_feat, num_train, num_iters);
+	final_theta =
+		gradient_descent(X, y, theta, alpha, num_feat, num_train, num_iters);
 
 	printf("Found thetas using Gradient Descent: [ ");
 

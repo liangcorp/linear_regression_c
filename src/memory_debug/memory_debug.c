@@ -98,8 +98,8 @@ void *f_debug_memory_realloc(void *ptr, unsigned int size, const char *file,
 		       size, line, file);
 		exit(1);
 	}
-	printf("%p to %p realloc %u bytes of memory at line %u in file %s\n", ptr, new_ptr, size,
-	       line, file);
+	printf("%p to %p realloc %u bytes of memory at line %u in file %s\n", ptr,
+	       new_ptr, size, line, file);
 
 	for (i = 0; i < LIST_SIZE; i++) {
 		if (mem_alloc_record_list.m[i].ptr_value == ptr) {
