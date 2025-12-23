@@ -95,7 +95,8 @@ int main(int argc, char *argv[])
 	*/
 
 	for (i = 0; i < num_train; i++) {
-		free(*(X + i)); /* Free the inner pointers before outer pointers */
+        /* Free the inner pointers before outer pointers */
+		free(*(X + i));
 	}
 	free(X);
 	free(y);
@@ -109,6 +110,7 @@ int main(int argc, char *argv[])
 
 #ifdef F_MEMORY_DEBUG
 	f_debug_memory_leak_check();
+    f_debug_memory_print();
 #endif
 	return 0;
 }

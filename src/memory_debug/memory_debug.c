@@ -19,6 +19,8 @@ void *f_debug_memory_malloc(unsigned int size, const char *file, unsigned int li
 
 	pthread_mutex_lock(&lock);
 
+	mem_alloc_record_list.no_of_malloc_call++;
+
 	ptr = malloc(size);
 
 	if (ptr == NULL) {
@@ -36,7 +38,6 @@ void *f_debug_memory_malloc(unsigned int size, const char *file, unsigned int li
 			mem_alloc_record_list.m[i].allocation_line = line;
 			strncpy(mem_alloc_record_list.m[i].allocation_file, file,
 				FILENAME_SIZE_LIMIT);
-			mem_alloc_record_list.occurrences++;
 			break;
 		}
 	}
@@ -55,6 +56,8 @@ void *f_debug_memory_calloc(unsigned int num, unsigned int size, const char *fil
 
 	pthread_mutex_lock(&lock);
 
+	mem_alloc_record_list.no_of_calloc_call++;
+
 	ptr = calloc(num, size);
 
 	if (ptr == NULL) {
@@ -71,8 +74,6 @@ void *f_debug_memory_calloc(unsigned int num, unsigned int size, const char *fil
 			mem_alloc_record_list.m[i].allocation_line = line;
 			strncpy(mem_alloc_record_list.m[i].allocation_file, file,
 				FILENAME_SIZE_LIMIT);
-
-			mem_alloc_record_list.occurrences++;
 			break;
 		}
 	}
@@ -90,6 +91,8 @@ void *f_debug_memory_realloc(void *ptr, unsigned int size, const char *file,
 	void *new_ptr = NULL;
 
 	pthread_mutex_lock(&lock);
+
+    mem_alloc_record_list.no_of_realloc_call++;
 
 	new_ptr = realloc(ptr, size);
 
@@ -124,10 +127,11 @@ void f_debug_memory_free(void *ptr, const char *file, unsigned int line)
 
 	pthread_mutex_lock(&lock);
 
+    mem_alloc_record_list.no_of_free_call++;
+
 	for (i = 0; i < LIST_SIZE; i++) {
 		if (mem_alloc_record_list.m[i].ptr_value == ptr) {
 			mem_alloc_record_list.m[i].ptr_value = NULL;
-			mem_alloc_record_list.occurrences--;
 			is_found = true;
 			break;
 		}
@@ -156,21 +160,37 @@ void f_debug_memory_debug_init(void)
 	for (i = 0; i < LIST_SIZE; i++) {
 		mem_alloc_record_list.m[i] = mem_alloc_record;
 	}
-	mem_alloc_record_list.occurrences = 0;
+    mem_alloc_record_list.no_of_malloc_call = 0;
+    mem_alloc_record_list.no_of_calloc_call = 0;
+    mem_alloc_record_list.no_of_realloc_call = 0;
+    mem_alloc_record_list.no_of_free_call = 0;
 }
 
 void f_debug_memory_leak_check(void)
 {
 	int i;
+    unsigned int no_of_unfreed_memory = 0;
 
+	printf("\n========== Memory Debug: Leak Check ==========\n");
 	for (i = 0; i < LIST_SIZE; i++) {
 		if (mem_alloc_record_list.m[i].ptr_value != NULL) {
 			printf("unfreed memory: %p allocated at line %u in file %s\n",
 			       mem_alloc_record_list.m[i].ptr_value,
 			       mem_alloc_record_list.m[i].allocation_line,
 			       mem_alloc_record_list.m[i].allocation_file);
+            no_of_unfreed_memory++;
 		}
 	}
 
-	printf("%d unfreed memory allocation\n", mem_alloc_record_list.occurrences);
+	printf("%d unfreed memory\n", no_of_unfreed_memory);
+}
+
+
+void f_debug_memory_print(void)
+{
+	printf("\n========== Memory Debug: Allocation Calls ==========\n");
+	printf("%d malloc function call\n", mem_alloc_record_list.no_of_malloc_call);
+	printf("%d calloc function call\n", mem_alloc_record_list.no_of_calloc_call);
+	printf("%d realloc function call\n", mem_alloc_record_list.no_of_realloc_call);
+	printf("%d free function call\n", mem_alloc_record_list.no_of_free_call);
 }

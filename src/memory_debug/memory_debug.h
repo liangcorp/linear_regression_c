@@ -11,7 +11,10 @@ typedef struct MemAllocRecord {
 
 typedef struct MemAllocRecordList {
 	MemAllocRecordType m[LIST_SIZE];
-	unsigned int occurrences;
+	unsigned int no_of_malloc_call;
+	unsigned int no_of_calloc_call;
+	unsigned int no_of_realloc_call;
+	unsigned int no_of_free_call;
 } MemAllocRecordListType;
 
 #define malloc(size) f_debug_memory_malloc(size, __FILE__, __LINE__)
@@ -28,3 +31,4 @@ void f_debug_memory_free(void *ptr, const char *file, unsigned int line);
 
 void f_debug_memory_debug_init(void);
 void f_debug_memory_leak_check(void);
+void f_debug_memory_print(void);
