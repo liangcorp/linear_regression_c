@@ -174,7 +174,7 @@ void f_debug_memory_leak_check(void)
 	printf("\n========== Memory Debug: Leak Check ==========\n");
 	for (i = 0; i < LIST_SIZE; i++) {
 		if (mem_alloc_record_list.m[i].ptr_value != NULL) {
-			printf("unfreed memory: %p allocated at line %u in file %s\n",
+			printf("unfreed heap memory: %p allocated at line %u in file %s\n",
 			       mem_alloc_record_list.m[i].ptr_value,
 			       mem_alloc_record_list.m[i].allocation_line,
 			       mem_alloc_record_list.m[i].allocation_file);
@@ -182,9 +182,8 @@ void f_debug_memory_leak_check(void)
 		}
 	}
 
-	printf("%d unfreed memory\n", no_of_unfreed_memory);
+	printf("%d unfreed heap memory\n", no_of_unfreed_memory);
 }
-
 
 void f_debug_memory_print(void)
 {
