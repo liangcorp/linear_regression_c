@@ -3,6 +3,8 @@
 #define LIST_SIZE 2048
 #define FILENAME_SIZE_LIMIT 4096
 
+enum AllocationFunction { MALLOC, CALLOC, REALLOC, FREE };
+
 typedef struct MemAllocRecord {
 	void *ptr_value;
 	unsigned int allocation_line;
@@ -10,12 +12,23 @@ typedef struct MemAllocRecord {
 } MemAllocRecordType;
 
 typedef struct MemAllocRecordList {
-	MemAllocRecordType m[LIST_SIZE];
+	MemAllocRecordType mem_alloc_record[LIST_SIZE];
 	unsigned int no_of_malloc_call;
 	unsigned int no_of_calloc_call;
 	unsigned int no_of_realloc_call;
 	unsigned int no_of_free_call;
 } MemAllocRecordListType;
+
+typedef struct MemAllocLocation {
+	unsigned int allocation_line;
+	char allocation_file[FILENAME_SIZE_LIMIT];
+	unsigned int occurrences;
+	enum AllocationFunction allocation_function;
+} MemAllocLocationType;
+
+typedef struct MemAllocLocationList {
+	MemAllocLocationType mem_alloc_location[LIST_SIZE];
+} MemAllocLocationListType;
 
 #define malloc(size) f_debug_memory_malloc(size, __FILE__, __LINE__)
 #define calloc(num, size) f_debug_memory_calloc(num, size, __FILE__, __LINE__)
