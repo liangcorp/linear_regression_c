@@ -1,4 +1,5 @@
-CC = clang
+CC = ccache clang
+
 all:
 	mkdir -p bin
 	mkdir -p lib
@@ -107,6 +108,12 @@ release:
 	${CC} -Wall -Werror -Wpedantic -std=c89 -o ./bin/feature_scale ./lib/libfeature_scale.a
 	${CC} -Wall -Werror -Wpedantic -std=c89 -o ./bin/linear_regression ./lib/main.o ./lib/libcost_function.a ./lib/libgradient_descent.a  ./lib/libread_from_data_file.a ./lib/libnormal_equation.a
 	chmod +x ./bin/*
+
+check:
+	${CC} --version
+
+distcheck:
+	uname -a
 
 format:
 	find -name *.h -exec clang-format -i {} \;
