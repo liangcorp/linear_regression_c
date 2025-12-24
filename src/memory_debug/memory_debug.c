@@ -280,7 +280,8 @@ void f_debug_memory_print(void)
 	int i;
 	const char *allocation_functions[] = { "malloc", "calloc", "realloc", "free" };
 
-	printf("\n========== Memory Debug: Allocation Calls ==========\n");
+	printf("\n========== Memory Debug: Function Calls ==========\n");
+    printf("Summary:\n");
 	printf("%d total malloc function call\n",
 	       mem_alloc_record_list.no_of_malloc_call);
 	printf("%d total calloc function call\n",
@@ -289,6 +290,7 @@ void f_debug_memory_print(void)
 	       mem_alloc_record_list.no_of_realloc_call);
 	printf("%d free function call\n\n", mem_alloc_record_list.no_of_free_call);
 
+    printf("Detail:\n");
 	for (i = 0; i < LIST_SIZE; i++) {
 		if (mem_alloc_location_list.mem_alloc_location[i].allocation_line != 0)
 			printf("%u %s at line %u in file %s\n",
