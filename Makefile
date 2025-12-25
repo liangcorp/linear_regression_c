@@ -1,4 +1,4 @@
-CC = ccache clang
+CC = clang
 
 all:
 	mkdir -p bin
