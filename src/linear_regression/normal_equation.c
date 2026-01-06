@@ -9,7 +9,8 @@
  *
  */
 
-#include "null.h"
+#include <stdio.h>
+
 #include "machine_learning.h"
 
 #ifdef F_MEMORY_DEBUG

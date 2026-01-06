@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2021
  *
  */
-#define _XOPEN_SOURCE 500
+/* #define _XOPEN_SOURCE 500 */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -246,11 +246,13 @@ int write_to_file(double **x, double *y, int num_train, int num_feat, char *file
 
 	for (i = 0; i < num_train; i++) {
 		for (j = 0; j < no_x_feat; j++) {
-			snprintf(buffer, sizeof(buffer) + 1, "%lf", x[i][j]);
+/* 			snprintf(buffer, sizeof(buffer) + 1, "%lf", x[i][j]); */
+			sprintf(buffer, "%lf", x[i][j]);
 			strcat(buffer, ",");
 			fprintf(fptr, "%s", buffer);
 		}
-		snprintf(buffer, sizeof(buffer) + 1, "%lf", y[i]);
+/* 		snprintf(buffer, sizeof(buffer) + 1, "%lf", y[i]); */
+		sprintf(buffer, "%lf", y[i]);
 		strcat(buffer, "\n");
 		fprintf(fptr, "%s", buffer);
 	}
